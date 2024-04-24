@@ -19,12 +19,12 @@
 
 <meta property="og:title" content="Keycloak Setup "/>
 <meta property="og:url" content="/keycloak-setup.html" />
-<meta property="og:description" content="Keycloak Setup Table of Contents Keycloak Configuration Database PostgreSQL Container Registry Building and uploading the container image Basic of Kubernetes and container runtime command Adding secrets to AWS Secrets Manager Deploy Keycloak in Kubernetes Add URL to AWS Route53 Links Keycloak Operator Keycloak Configuration Customizing Theme in Dev Mode Use …" />
+<meta property="og:description" content="Keycloak Setup Table of Contents Keycloak Setup Keycloak Configuration Customizing Theme in Dev Mode Setting hostname and proxy mode Database PostgreSQL Container Registry Building and uploading the container image Token exchange Build the container image with the command Basic of Kubernetes and container runtime command Adding secrets to AWS Secrets …" />
 <meta property="og:site_name" content="joe&#39;s blog" />
 <meta property="og:article:author" content="joe" />
 <meta property="og:article:published_time" content="2024-04-12T10:20:00+08:00" />
 <meta name="twitter:title" content="Keycloak Setup ">
-<meta name="twitter:description" content="Keycloak Setup Table of Contents Keycloak Configuration Database PostgreSQL Container Registry Building and uploading the container image Basic of Kubernetes and container runtime command Adding secrets to AWS Secrets Manager Deploy Keycloak in Kubernetes Add URL to AWS Route53 Links Keycloak Operator Keycloak Configuration Customizing Theme in Dev Mode Use …">
+<meta name="twitter:description" content="Keycloak Setup Table of Contents Keycloak Setup Keycloak Configuration Customizing Theme in Dev Mode Setting hostname and proxy mode Database PostgreSQL Container Registry Building and uploading the container image Token exchange Build the container image with the command Basic of Kubernetes and container runtime command Adding secrets to AWS Secrets …">
 
         <title>Keycloak Setup  · joe&#39;s blog
 </title>
@@ -77,22 +77,42 @@
 <div class="row-fluid">
         <div class="span8 offset2 article-content">
             
-            <h1>Keycloak Setup</h1>
-<h1>Table of Contents</h1>
-<ol>
-<li><a href="#keycloak-configuration">Keycloak Configuration</a></li>
+            <h1 id="keycloak-setup">Keycloak Setup</h1>
+<div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#keycloak-setup">Keycloak Setup</a></li>
+<li><a href="#keycloak-configuration">Keycloak Configuration</a><ul>
+<li><a href="#customizing-theme-in-dev-mode">Customizing Theme in Dev Mode</a></li>
+<li><a href="#setting-hostname-and-proxy-mode">Setting hostname and proxy mode</a></li>
+</ul>
+</li>
 <li><a href="#database-postgresql">Database PostgreSQL</a></li>
 <li><a href="#container-registry">Container Registry</a></li>
-<li><a href="#building-and-uploading-the-container-image">Building and uploading the container image</a></li>
+<li><a href="#building-and-uploading-the-container-image">Building and uploading the container image</a><ul>
+<li><a href="#token-exchange">Token exchange</a></li>
+<li><a href="#build-the-container-image-with-the-command">Build the container image with the command</a></li>
+</ul>
+</li>
 <li><a href="#basic-of-kubernetes-and-container-runtime-command">Basic of Kubernetes and container runtime command</a></li>
 <li><a href="#adding-secrets-to-aws-secrets-manager">Adding secrets to AWS Secrets Manager</a></li>
-<li><a href="#deploy-keycloak-in-kubernetes">Deploy Keycloak in Kubernetes</a></li>
+<li><a href="#deploy-keycloak-in-kubernetes">Deploy Keycloak in Kubernetes</a><ul>
+<li><a href="#create-namespace-and-image-pull-secret">Create namespace and image pull secret</a></li>
+<li><a href="#setup-secret">Setup Secret</a></li>
+<li><a href="#apply-deployment-service-and-ingress">Apply deployment, service and ingress</a><ul>
+<li><a href="#create-keycloak-deploymentyaml-file">Create keycloak-deployment.yaml file</a></li>
+<li><a href="#create-keycloak-serviceyaml-file">Create keycloak-service.yaml file</a></li>
+<li><a href="#create-keycloak-ingressyaml-file">Create keycloak-ingress.yaml file</a></li>
+<li><a href="#apply-the-kubernetes-manifests">Apply the Kubernetes manifests</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#add-url-to-aws-route53">Add URL to AWS Route53</a></li>
 <li><a href="#links">Links</a></li>
 <li><a href="#keycloak-operator">Keycloak Operator</a></li>
-</ol>
-<h1>Keycloak Configuration</h1>
-<h2>Customizing Theme in Dev Mode</h2>
+</ul>
+</div>
+<h1 id="keycloak-configuration">Keycloak Configuration</h1>
+<h2 id="customizing-theme-in-dev-mode">Customizing Theme in Dev Mode</h2>
 <p>Use the below command only to disable caching and this makes is possible to edit theme resources directly from <code>themes/</code> directory, hence you can see the effect of the changes without restarting Keycloak, only in Dev mode</p>
 <div class="highlight"><pre><span></span><code>bin/kc.[sh|bat] start --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false
 </code></pre></div>
@@ -102,7 +122,7 @@
 <li><a href="https://www.keycloak.org/docs/latest/server_development/#creating-a-theme">Creating a theme</a></li>
 <li><a href="https://www.baeldung.com/spring-keycloak-custom-themes">Customizing Themes for Keycloak</a></li>
 </ol>
-<h2>Setting hostname and proxy mode</h2>
+<h2 id="setting-hostname-and-proxy-mode">Setting hostname and proxy mode</h2>
 <p>The <code>--hostname-strict-https=false</code> and <code>--hostname-strict=false</code> must be passed into the command <code>start --optimized</code> else error will be encountered</p>
 <p>The proxy mode must be set or else Keycloak will fail to run, but you would still see the message claiming that proxy mode is to be deprecated, actually it is still not deprecated</p>
 <div class="highlight"><pre><span></span><code>bin/kc.[sh|bat] start --optimized --hostname-strict-https=false --hostname-strict=false --proxy=edge
@@ -116,7 +136,7 @@
 <li><a href="https://www.keycloak.org/server/configuration#_starting_keycloak_in_production_mode">Starting Keycloak in production mode</a></li>
 <li><a href="https://unix.stackexchange.com/questions/690655/strict-hostname-resolution-configured-but-no-hostname-was-set">Strict hostname resolution configured but no hostname was set</a></li>
 </ol>
-<h1>Database PostgreSQL</h1>
+<h1 id="database-postgresql">Database PostgreSQL</h1>
 <ol>
 <li>
 <p>Create a user for Keycloak</p>
@@ -128,7 +148,7 @@ b)  Set a password for this user</p>
 <p>a)  permission, assign above user as the owner for the database</p>
 </li>
 </ol>
-<h1>Container Registry</h1>
+<h1 id="container-registry">Container Registry</h1>
 <ol>
 <li>
 <p>Create a container registry in the project git repository in GitLab</p>
@@ -148,7 +168,7 @@ c)  Source is "Direct member"
 d)  Note down the username for this member after the "@" sign</p>
 </li>
 </ol>
-<h1>Building and uploading the container image</h1>
+<h1 id="building-and-uploading-the-container-image">Building and uploading the container image</h1>
 <p><a href="https://www.keycloak.org/server/containers">Running Keycloak in a container</a></p>
 <p>Build the container with the Dockerfile copied and modified from above link</p>
 <p>Dockerfile:</p>
@@ -207,7 +227,7 @@ c) <a href="https://stackoverflow.com/questions/39356300/avoid-keycloak-default-
 <p>a)  Not enabled until further notice</p>
 </li>
 </ol>
-<h2>Token exchange</h2>
+<h2 id="token-exchange">Token exchange</h2>
 <p>This feature is disabled until further notice</p>
 <ol>
 <li><a href="https://keycloak.ch/keycloak-tutorials/tutorial-token-exchange/">Configuring Token Exchange using the CLI</a></li>
@@ -218,14 +238,14 @@ c) <a href="https://stackoverflow.com/questions/39356300/avoid-keycloak-default-
 <ol>
 <li><a href="https://www.keycloak.org/server/containers#_running_a_standard_keycloak_container">Running a standard Keycloak container</a></li>
 </ol>
-<h2>Build the container image with the command</h2>
+<h2 id="build-the-container-image-with-the-command">Build the container image with the command</h2>
 <div class="highlight"><pre><span></span><code>podman build . -t localhost/keycloak:v1.0.0
 podman login gitlab-url:port
 podman push localhost/keycloak:v1.0.0
 gitlab-url:port/UserOrGroup/keycloak:v1.0.0
 </code></pre></div>
 
-<h1>Basic of Kubernetes and container runtime command</h1>
+<h1 id="basic-of-kubernetes-and-container-runtime-command">Basic of Kubernetes and container runtime command</h1>
 <p><code>command</code> in Kubernetes means <code>ENTRYPOINT</code> in container runtime</p>
 <p><code>args</code> in Kubernetes means <code>CMD</code> in container runtime</p>
 <p>It is best to write all these fields in container runtime and Kubernetes manifest to avoid confusion, e.g. what command and arguments are combined.</p>
@@ -236,7 +256,7 @@ gitlab-url:port/UserOrGroup/keycloak:v1.0.0
 <li><a href="https://docs.docker.com/reference/dockerfile/#entrypoint">ENTRYPOINT</a></li>
 <li><a href="https://docs.docker.com/reference/dockerfile/#cmd">CMD</a></li>
 </ol>
-<h1>Adding secrets to AWS Secrets Manager</h1>
+<h1 id="adding-secrets-to-aws-secrets-manager">Adding secrets to AWS Secrets Manager</h1>
 <ol>
 <li>
 <p>Create a new secret</p>
@@ -258,13 +278,13 @@ g)  kc-db-password = DBKEYCLOAKPASSWORD</p>
 <p>Encryption with aws/secretsmanager key</p>
 </li>
 </ol>
-<h1>Deploy Keycloak in Kubernetes</h1>
-<h2>Create namespace and image pull secret</h2>
+<h1 id="deploy-keycloak-in-kubernetes">Deploy Keycloak in Kubernetes</h1>
+<h2 id="create-namespace-and-image-pull-secret">Create namespace and image pull secret</h2>
 <div class="highlight"><pre><span></span><code><span class="n">kubectl</span><span class="w"> </span><span class="n">create</span><span class="w"> </span><span class="n">ns</span><span class="w"> </span><span class="n">keycloak</span>
 <span class="n">kubectl</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="w"> </span><span class="n">keycloak</span><span class="w"> </span><span class="n">create</span><span class="w"> </span><span class="n">secret</span><span class="w"> </span><span class="n">docker</span><span class="o">-</span><span class="n">registry</span><span class="w"> </span><span class="n">TOKENNAME</span><span class="w"> </span><span class="o">--</span><span class="n">docker</span><span class="o">-</span><span class="n">server</span><span class="o">=</span><span class="nl">CONTAINERREGISTRYURL:</span><span class="n">PORT</span><span class="w"> </span><span class="o">--</span><span class="n">docker</span><span class="o">-</span><span class="n">username</span><span class="o">=</span><span class="n">USERNAME</span><span class="w"> </span><span class="o">--</span><span class="n">docker</span><span class="o">-</span><span class="n">password</span><span class="o">=</span><span class="n">PASSWORD</span>
 </code></pre></div>
 
-<h2>Setup Secret</h2>
+<h2 id="setup-secret">Setup Secret</h2>
 <p>Create a bash script below to retrieve secrets from AWS Secrets Manager and create a Kubernetes Secret manifest from it</p>
 <div class="highlight"><pre><span></span><code><span class="n">aws</span><span class="w"> </span><span class="n">secretsmanager</span><span class="w"> </span><span class="n">get</span><span class="o">-</span><span class="n">secret</span><span class="o">-</span><span class="n">value</span><span class="w"> </span><span class="o">--</span><span class="n">secret</span><span class="o">-</span><span class="n">id</span><span class="w"> </span><span class="s">&quot;SECRETNAME&quot;</span><span class="w"> </span><span class="o">--</span><span class="n">region</span><span class="w"> </span><span class="s">&quot;REGION&quot;</span><span class="w"> </span><span class="o">--</span><span class="n">query</span><span class="w"> </span><span class="n">SecretString</span><span class="w"> </span><span class="o">--</span><span class="k">output</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">secret</span><span class="p">.</span><span class="n">json</span><span class="w"> </span><span class="o">&amp;&amp;</span>
 <span class="n">jq</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="w"> </span><span class="s">&quot;to_entries|map(</span><span class="se">\&quot;</span><span class="s">\(.key)=\(.value|tostring)</span><span class="se">\&quot;</span><span class="s">)|.[]&quot;</span><span class="w"> </span><span class="n">secret</span><span class="p">.</span><span class="n">json</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">secret</span><span class="p">.</span><span class="n">env</span><span class="w"> </span><span class="o">&amp;&amp;</span>
@@ -276,8 +296,8 @@ g)  kc-db-password = DBKEYCLOAKPASSWORD</p>
 <div class="highlight"><pre><span></span><code>kubectl apply -f keycloak-secret.yaml &amp;&amp; rm keycloak-secret.yaml
 </code></pre></div>
 
-<h2>Apply deployment, service and ingress</h2>
-<h3>Create keycloak-deployment.yaml file</h3>
+<h2 id="apply-deployment-service-and-ingress">Apply deployment, service and ingress</h2>
+<h3 id="create-keycloak-deploymentyaml-file">Create keycloak-deployment.yaml file</h3>
 <div class="highlight"><pre><span></span><code><span class="n">apiVersion</span><span class="o">:</span><span class="w"> </span><span class="n">apps</span><span class="o">/</span><span class="n">v1</span>
 <span class="n">kind</span><span class="o">:</span><span class="w"> </span><span class="n">Deployment</span>
 <span class="n">metadata</span><span class="o">:</span>
@@ -355,7 +375,7 @@ g)  kc-db-password = DBKEYCLOAKPASSWORD</p>
 <span class="w">                  </span><span class="n">key</span><span class="o">:</span><span class="w"> </span><span class="n">kc</span><span class="o">-</span><span class="n">db</span><span class="o">-</span><span class="n">password</span>
 </code></pre></div>
 
-<h3>Create keycloak-service.yaml file</h3>
+<h3 id="create-keycloak-serviceyaml-file">Create keycloak-service.yaml file</h3>
 <div class="highlight"><pre><span></span><code><span class="n">apiVersion</span><span class="o">:</span><span class="w"> </span><span class="n">v1</span>
 <span class="n">kind</span><span class="o">:</span><span class="w"> </span><span class="n">Service</span>
 <span class="n">metadata</span><span class="o">:</span>
@@ -373,7 +393,7 @@ g)  kc-db-password = DBKEYCLOAKPASSWORD</p>
 <span class="w">  </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="n">ClusterIP</span>
 </code></pre></div>
 
-<h3>Create keycloak-ingress.yaml file</h3>
+<h3 id="create-keycloak-ingressyaml-file">Create keycloak-ingress.yaml file</h3>
 <div class="highlight"><pre><span></span><code><span class="n">apiVersion</span><span class="o">:</span><span class="w"> </span><span class="n">networking</span><span class="o">.</span><span class="na">k8s</span><span class="o">.</span><span class="na">io</span><span class="o">/</span><span class="n">v1</span>
 <span class="n">kind</span><span class="o">:</span><span class="w"> </span><span class="n">Ingress</span>
 <span class="n">metadata</span><span class="o">:</span>
@@ -401,18 +421,18 @@ g)  kc-db-password = DBKEYCLOAKPASSWORD</p>
 <span class="w">    </span><span class="n">secretName</span><span class="o">:</span><span class="w"> </span><span class="n">keycloak</span><span class="o">-</span><span class="n">tls</span><span class="o">-</span><span class="n">cert</span><span class="o">-</span><span class="n">by</span><span class="o">-</span><span class="n">cert</span><span class="o">-</span><span class="n">manager</span>
 </code></pre></div>
 
-<h3>Apply the Kubernetes manifests</h3>
+<h3 id="apply-the-kubernetes-manifests">Apply the Kubernetes manifests</h3>
 <div class="highlight"><pre><span></span><code>kubectl apply -f keycloak-deployment.yaml -f keycloak-service.yaml -f keycloak-ingress.yaml
 </code></pre></div>
 
-<h1>Add URL to AWS Route53</h1>
+<h1 id="add-url-to-aws-route53">Add URL to AWS Route53</h1>
 <ol>
 <li>Add a record name from the host url in Kubernetes ingress</li>
 <li>Set record type to CNAME</li>
 <li>Copy the LoadBalancers value from the Kubernetes ingress object and paste it into the Value field</li>
 <li>Routing policy set to Simple Routing</li>
 </ol>
-<h1>Links</h1>
+<h1 id="links">Links</h1>
 <ol>
 <li>
 <p><a href="https://www.keycloak.org/server/configuration">Configuring Keycloak</a></p>
@@ -425,7 +445,7 @@ g)  kc-db-password = DBKEYCLOAKPASSWORD</p>
 <li><a href="https://github.com/keycloak/keycloak/tree/main/quarkus/container">Keycloak Container Image</a></li>
 <li><a href="https://www.keycloak.org/getting-started/getting-started-kube">Keycloak Kubernetes</a></li>
 </ol>
-<h1>Keycloak Operator</h1>
+<h1 id="keycloak-operator">Keycloak Operator</h1>
 <ol>
 <li><a href="https://www.keycloak.org/operator/installation">Keycloak Operator Installation</a></li>
 <li><a href="https://github.com/keycloak/keycloak/tree/main/operator">Keycloak on Quarkus</a></li>

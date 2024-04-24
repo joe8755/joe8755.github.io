@@ -19,12 +19,12 @@
 
 <meta property="og:title" content="Kafka "/>
 <meta property="og:url" content="/kafka.html" />
-<meta property="og:description" content="Kafka Table of Contents How Kafka Works To store messages reliably Number of Brokers and Partitions Log retention Retention Policy Cleanup Policy OS Tuning Garbage Collector Commits and Offsets Using interceptors Creating topic programmatically or via an admin client Produce Message Schema of Messages Authentication and Encryption Monitoring Kafka Logs …" />
+<meta property="og:description" content="Kafka Table of Contents Kafka How Kafka works To store messages reliably Number of Brokers and Partitions Log retention Time-based retention Size-based retention Closing log segment log.segment.bytes log.roll.ms Retention Policy Cleanup Policy OS Tuning Garbage Collector Commits and Offsets Using interceptors Creating topic programmatically or via …" />
 <meta property="og:site_name" content="joe&#39;s blog" />
 <meta property="og:article:author" content="joe" />
 <meta property="og:article:published_time" content="2024-04-12T10:20:00+08:00" />
 <meta name="twitter:title" content="Kafka ">
-<meta name="twitter:description" content="Kafka Table of Contents How Kafka Works To store messages reliably Number of Brokers and Partitions Log retention Retention Policy Cleanup Policy OS Tuning Garbage Collector Commits and Offsets Using interceptors Creating topic programmatically or via an admin client Produce Message Schema of Messages Authentication and Encryption Monitoring Kafka Logs …">
+<meta name="twitter:description" content="Kafka Table of Contents Kafka How Kafka works To store messages reliably Number of Brokers and Partitions Log retention Time-based retention Size-based retention Closing log segment log.segment.bytes log.roll.ms Retention Policy Cleanup Policy OS Tuning Garbage Collector Commits and Offsets Using interceptors Creating topic programmatically or via …">
 
         <title>Kafka  · joe&#39;s blog
 </title>
@@ -77,27 +77,48 @@
 <div class="row-fluid">
         <div class="span8 offset2 article-content">
             
-            <h1>Kafka</h1>
-<h1>Table of Contents</h1>
-<ol>
-<li><a href="#how-kafka-works">How Kafka Works</a></li>
+            <h1 id="kafka">Kafka</h1>
+<div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#kafka">Kafka</a></li>
+<li><a href="#how-kafka-works">How Kafka works</a></li>
 <li><a href="#to-store-messages-reliably">To store messages reliably</a></li>
 <li><a href="#number-of-brokers-and-partitions">Number of Brokers and Partitions</a></li>
-<li><a href="#log-retention">Log retention</a></li>
+<li><a href="#log-retention">Log retention</a><ul>
+<li><a href="#time-based-retention">Time-based retention</a></li>
+<li><a href="#size-based-retention">Size-based retention</a></li>
+<li><a href="#closing-log-segment">Closing log segment</a><ul>
+<li><a href="#logsegmentbytes">log.segment.bytes</a></li>
+<li><a href="#logrollms">log.roll.ms</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#retention-policy-cleanup-policy">Retention Policy Cleanup Policy</a></li>
 <li><a href="#os-tuning">OS Tuning</a></li>
 <li><a href="#garbage-collector">Garbage Collector</a></li>
 <li><a href="#commits-and-offsets">Commits and Offsets</a></li>
 <li><a href="#using-interceptors">Using interceptors</a></li>
 <li><a href="#creating-topic-programmatically-or-via-an-admin-client">Creating topic programmatically or via an admin client</a></li>
-<li><a href="#produce-message">Produce Message</a></li>
+<li><a href="#produce-message">Produce Message</a><ul>
+<li><a href="#importance-of-keys">Importance of keys</a></li>
+</ul>
+</li>
 <li><a href="#schema-of-messages">Schema of Messages</a></li>
 <li><a href="#authentication-and-encryption">Authentication and Encryption</a></li>
 <li><a href="#monitoring-kafka-logs">Monitoring Kafka Logs</a></li>
-<li><a href="#faqs">FAQs</a></li>
-<li><a href="#kafka-is-difficult">ChatGPT 3.5 on why it is difficult to use Kafka</a></li>
-</ol>
-<h1>How Kafka works</h1>
+<li><a href="#faqs">FAQs</a><ul>
+<li><a href="#is-the-leader-part-of-isr-insync-replicas-list">Is the leader part of ISR (insync replicas) list</a></li>
+<li><a href="#do-all-brokers-in-kafka-always-have-one-replica-of-a-partition-of-a-topic">Do all brokers in Kafka always have one replica of a partition of a topic</a></li>
+</ul>
+</li>
+<li><a href="#setup-kafka-and-grafana-dashboards-for-kafka-in-kubernetes">Setup Kafka and Grafana dashboards for Kafka in Kubernetes</a><ul>
+<li><a href="#troubleshooting-kafka-consumer-lag-exporter-dashboard">Troubleshooting Kafka Consumer Lag Exporter Dashboard</a></li>
+</ul>
+</li>
+<li><a href="#kafka-is-difficult">Kafka is difficult</a></li>
+</ul>
+</div>
+<h1 id="how-kafka-works">How Kafka works</h1>
 <p>Kafka does not have the concept of master and slave</p>
 <p>Main concept of Kafka is that a broker is a leader of a partition</p>
 <p>A topic in kafka is divided into a number of partitions</p>
@@ -141,7 +162,7 @@ b) Followers: Broker A, Broker B</p>
 <blockquote>
 <p>Each partition has one server which acts as the "leader" and zero or more servers which act as "followers". The leader handles all read and write requests for the partition while the followers passively replicate the leader. If the leader fails, one of the followers will automatically become the new leader. Each server acts as a leader for some of its partitions and a follower for others so load is well balanced within the cluster.</p>
 </blockquote>
-<h1>To store messages reliably</h1>
+<h1 id="to-store-messages-reliably">To store messages reliably</h1>
 <p>With a Kafka cluster of at least 3 brokers, we can define that reliability is achieved when we can tolerate one unhealthy broker</p>
 <p>The settings of the brokers and clients to achieve better reliability are as following, note that this is a <strong>non-exhaustive list, it is not conclusive and it might not be correct,</strong></p>
 <p>For the broker level:</p>
@@ -190,7 +211,7 @@ b) Followers: Broker A, Broker B</p>
 <p>a)  to control when offsets are commited at client side, this is necessary to minimize duplicates and avoid missing data</p>
 </li>
 </ol>
-<h1>Number of Brokers and Partitions</h1>
+<h1 id="number-of-brokers-and-partitions">Number of Brokers and Partitions</h1>
 <p>Number of brokers depending on:</p>
 <ol>
 <li>Disk capacity
@@ -247,35 +268,35 @@ b) Followers: Broker A, Broker B</p>
 <p>Diving the expected throughput by the producers and by the consumers to get the number of partitions</p>
 <p>Example, RW 1GBps from a topic, each consumer can process 50MBps, then we need 20 partitions</p>
 <p>If you don't have detailed information, always start small by limiting the per day retention to 6GB per partition</p>
-<h1>Log retention</h1>
+<h1 id="log-retention">Log retention</h1>
 <p>Log retention is configured at broker topic level</p>
 <p>Messages will be deleted if either the time limit or size limit are reached. It's recommended to use only one type of retention to prevent unwanted data-loss. Personally I prefer size-based retention</p>
-<h2>Time-based retention</h2>
+<h2 id="time-based-retention">Time-based retention</h2>
 <p>Time-based retention's parameters are <code>log.retention.hours</code>, <code>log.retention.minutes</code>, <code>log.retention.ms</code>, smaller size unit will take precedence</p>
 <p>This time-based retention for messages will only start to count towards the time limit only after the messages are considered to be deleted or after the log segment has been closed, not after the messages are produced</p>
 <p>Note that retention by time is affected by <code>mtime</code>, which will be not accurate when partitions are moved using admin tool</p>
-<h2>Size-based retention</h2>
+<h2 id="size-based-retention">Size-based retention</h2>
 <p>Size-based retention's parameter is <code>log.retention.bytes</code></p>
 <p><code>log.retention.bytes</code> is applied per partition</p>
 <p>A topic with 8 partitions and log.retention.bytes is set to 1GB, the
 topic size is 8GB (8*1GB)</p>
 <p>Note that retention is for individual partition, not the topic, so increasing the number of partitions will increase the disk size usage if sized-based retention is used</p>
 <p>Setting <code>log.retention.bytes</code> to -1 allows for infinite retentions</p>
-<h2>Closing log segment</h2>
-<h3>log.segment.bytes</h3>
+<h2 id="closing-log-segment">Closing log segment</h2>
+<h3 id="logsegmentbytes">log.segment.bytes</h3>
 <p>log segment is closed (and be considered to be deleted) when
 <code>log.segment.bytes</code> is reached, default to 1GB.</p>
 <p>Smaller <code>log.segment.bytes</code> means that the file will be closed and new file will be opened more often, this will reduce overall efficiency of disk writes</p>
 <p>The time to that log segment is deleted is calculated as (<code>log.segment.bytes</code> limit reached + <code>log.retention.ms</code>)</p>
 <p>If it takes 10 days to reach <code>log.segment.bytes</code> of 1GB (100MB per day), with 7 days of <code>log.retention.ms</code>, total time to delete the log segment would be 17 days</p>
 <p>Note that log segment size affects the retrieval of offset by timestamp. If the consumer want to get an offset at a specific timestamp, Kafka will look at the <em>creation time</em> and <em>last modified time</em> of the log segments to determine the correct file to retrieve the offset (the offset at the beginning of the log segment, which is also the filename, will be sent in the response to the consumer)</p>
-<h3>log.roll.ms</h3>
+<h3 id="logrollms">log.roll.ms</h3>
 <p><code>log.roll.ms</code> controls when a log segment will be closed</p>
 <p>When the log.roll.ms limit is reached, the log segment will be closed and a new log segment will be opened</p>
 <p><code>log.roll.ms</code> and <code>l</code>og.segment.bytes` can be used together as time limit and size limit respectively, whichever comes first Kafka will close the log segment</p>
 <p>By default there is no setting for <code>log.roll.ms</code></p>
 <p>Disk performance will be impacted if there are multiple log segments closed simultaneously, it can happen when there are many partitions that never reach limit of <code>log.segment.bytes</code>. Kafka always start to countdown when the brokers start, and it closes these low-volume partitions particularly at the same time as <code>log.roll.ms</code> limit reached. Do not confuse this with the countdown of other bigger volume partitions which would be closed when their <code>log.segment.bytes</code> limits are reached</p>
-<h1>Retention Policy Cleanup Policy</h1>
+<h1 id="retention-policy-cleanup-policy">Retention Policy Cleanup Policy</h1>
 <p>Use "delete" policy, it will respect the size/time limit, while "compact" policy needs key to be set in messages</p>
 <p>The “delete” policy (which is the default) will discard old segments when their retention time or size limit has been reached.</p>
 <p>the “compact” policy will enable log compaction, which retains the latest value for each key.</p>
@@ -303,7 +324,7 @@ topic size is 8GB (8*1GB)</p>
 </li>
 </ol>
 <p>further in the book KTDG2E on page 122, 128, 150, 156, 159</p>
-<h1>OS Tuning</h1>
+<h1 id="os-tuning">OS Tuning</h1>
 <p>To improve performance, on virtual memory, networking subsystems and disk mount point used for storing log segments, they are typically configured in <code>/etc/sysctl.conf</code></p>
 <p><strong>Virtual Memory</strong></p>
 <p>Disable Swap to disk, it will impact the performance of Kafka, and system page cache is not enough for Kafka to use if Virtual Memory system is swapping to disk</p>
@@ -342,11 +363,11 @@ number of connections</code> the brokers makes</p>
 <p>set <code>net.ipv4.tcp_window_scaling</code> to 1, this is TCP window scaling. Clients can transfer data more efficiently and broker can buffer that data</p>
 <p>set <code>net.ipv4.tcp_max_syn_backlog</code> above the default of 1024, this can increase the number of simultaneous connections to be accepted</p>
 <p>set <code>net.core.netdev_max_backlog</code> to greater than the default of 1000 can assist with bursts of network traffic, allowing more packets to be queued for kernel processing</p>
-<h1>Garbage Collector</h1>
+<h1 id="garbage-collector">Garbage Collector</h1>
 <p>To-do</p>
-<h1>Commits and Offsets</h1>
+<h1 id="commits-and-offsets">Commits and Offsets</h1>
 <p>To-do, Chapter 4 of Kafka The Definitive Guide 2^nd^ Edition</p>
-<h1>Using interceptors</h1>
+<h1 id="using-interceptors">Using interceptors</h1>
 <p>The interceptor that we can use is producer record and acknowledgement</p>
 <p>Why we want to use the interceptor? To record these two metrics</p>
 <ul>
@@ -354,7 +375,7 @@ number of connections</code> the brokers makes</p>
 <li>when Kafka responds with an acknowledgement to the producer, this does not allow modification</li>
 </ul>
 <p>In Java, the interceptor can be applied without changing client code, with classpath, jar file and config. I am not sure about other languages. For more, read Chapter 3 of the book Kafka The Definitive Guide 2nd Edition</p>
-<h1>Creating topic programmatically or via an admin client</h1>
+<h1 id="creating-topic-programmatically-or-via-an-admin-client">Creating topic programmatically or via an admin client</h1>
 <p>It is better to create topic via an admin client on the side, instead of via the code in producer/consumer client applications</p>
 <p>You can read this in the book Kafka The Definitive Guide 2nd Edition Chapter 12</p>
 <p><code>auto.create.topics.enable</code> is set to <em>false</em> by default, it is not recommended to set it to <em>true</em>, because explosion of topics can happen. And topic created automatically will always have the same defaults, for example, <code>replication.factor</code> needs to be at least 3 to ensure durability but the <code>default.replication.factor</code> can be other values and that could be overlooked.</p>
@@ -365,13 +386,13 @@ number of connections</code> the brokers makes</p>
 <p>a)  <a href="https://stackoverflow.com/questions/43563977/can-a-kafka-producer-create-topics-and-partitions">Can a Kafka producer create topics and partitions?</a></p>
 </li>
 </ol>
-<h1>Produce Message</h1>
+<h1 id="produce-message">Produce Message</h1>
 <p>key is optional when producing messages</p>
 <p>How to set the key? Keys can be customers if the topic is shopping cart messages</p>
 <p>When no key is specified (null), and the default partitioner is used, the record will be sent to one of the partitions at random</p>
 <p>stick round-robin algorithm in the default partitioner will fill a batch of messages to send to a single partition and repeat for the next partition</p>
 <p>resulting in fewer requests to send the same number of messages, lower latency and lower CPU usage on the broker</p>
-<h2>Importance of keys</h2>
+<h2 id="importance-of-keys">Importance of keys</h2>
 <p>key is needed for order guarantee across partitions</p>
 <p>if no key is set, messages will go to any partition chosen by the default partitioner, order of messages will not be guaranteed across partitions</p>
 <p><code>idempotence = true</code> only guarantee order within the partitions themselves, not across partitions</p>
@@ -388,7 +409,7 @@ number of connections</code> the brokers makes</p>
     a) <a href="https://stackoverflow.com/questions/49982786/ordering-guarantees-when-using-idempotent-kafka-producer">Ordering guarantees when using idempotent Kafka Producer</a></p>
 </li>
 </ol>
-<h1>Schema of Messages</h1>
+<h1 id="schema-of-messages">Schema of Messages</h1>
 <p>Schema of messages are like API specs, it is needed especially in the future to scale for communication between producers (upstream) and consumers (downstream)</p>
 <p>It is better to use Avro and schema registry endpoint might have to be setup</p>
 <ol>
@@ -401,7 +422,7 @@ number of connections</code> the brokers makes</p>
 <li><a href="https://stackoverflow.com/questions/45635726/kafkaavroserializer-for-serializing-avro-without-schema-registry-url">KafkaAvroSerializer for serializing Avro without schema.registry.url</a></li>
 <li><a href="https://avro.apache.org/docs/1.7.7/spec.html#Schema+Resolution">Schema Resolution</a></li>
 </ol>
-<h1>Authentication and Encryption</h1>
+<h1 id="authentication-and-encryption">Authentication and Encryption</h1>
 <p>Kafka supports four security protocols</p>
 <ol>
 <li><strong>PLAINTEXT:</strong> no encryption, no authentication</li>
@@ -412,18 +433,18 @@ number of connections</code> the brokers makes</p>
 <p>Choose one depends on your security preference</p>
 <p>There is a noticeable overhead in terms of CPU usage (20-30%), do load-testing on throughput or latency in your different setups</p>
 <p>Please check out official documentation to setup the security protocols for different programming languages and whether to use client certificates for authentication</p>
-<h1>Monitoring Kafka Logs</h1>
+<h1 id="monitoring-kafka-logs">Monitoring Kafka Logs</h1>
 <p>For self-hosted Kafka in k8s, in <code>Explore</code> with <code>Loki</code> data source, use the following query:</p>
 <p><em>{job="kafka/kafka"} |= ``</em></p>
 <p>The logs shown include all Kafka pods in k8s</p>
 <p>Or you can view it with Lens or kubectl directly in the Kafka Namespace</p>
-<h1>FAQs</h1>
-<h2>Is the leader part of ISR (insync replicas) list</h2>
+<h1 id="faqs">FAQs</h1>
+<h2 id="is-the-leader-part-of-isr-insync-replicas-list">Is the leader part of ISR (insync replicas) list</h2>
 <p>Yes, the leader is part of the ISR list.</p>
 <ol>
 <li><a href="https://stackoverflow.com/questions/63917374/is-the-leader-part-of-isr-list">Is the leader part of ISR list</a></li>
 </ol>
-<h2>Do all brokers in Kafka always have one replica of a partition of a topic</h2>
+<h2 id="do-all-brokers-in-kafka-always-have-one-replica-of-a-partition-of-a-topic">Do all brokers in Kafka always have one replica of a partition of a topic</h2>
 <p>Alternative question: Do all brokers in Kafka always sync with the leader of a partition?</p>
 <p>I did not find a decisive answer to this, there is nowhere mentioned of the number or maximum number of replicas of a partition nor whether all the brokers replicate one copy of the partition</p>
 <p>Only <code>min.insync.replicas</code> and <code>replication.factor</code> are being considered for the reliability of Kafka</p>
@@ -452,12 +473,12 @@ d)  <a href="https://stackoverflow.com/questions/46862274/whether-kafka-broker-h
 b)  <a href="https://stackoverflow.com/questions/71666294/kafka-replication-factor-vs-min-insync-replicas">Kafka replication factor vs min.insync.replicas</a></p>
 </li>
 </ol>
-<h1>Setup Kafka and Grafana dashboards for Kafka in Kubernetes</h1>
+<h1 id="setup-kafka-and-grafana-dashboards-for-kafka-in-kubernetes">Setup Kafka and Grafana dashboards for Kafka in Kubernetes</h1>
 <p>helm chart bitnami/kafka 27.1.2</p>
 <p>Enable kafka exporter metrics at port 9308 and jmx built-in exporter metrics at port 5556</p>
 <p>configure prometheus to scrape these two endpoints</p>
 <p>Import grafana dashboard from kafka exporter by danielqsj in github</p>
-<h2>Troubleshooting Kafka Consumer Lag Exporter Dashboard</h2>
+<h2 id="troubleshooting-kafka-consumer-lag-exporter-dashboard">Troubleshooting Kafka Consumer Lag Exporter Dashboard</h2>
 <p>After importing the kafka exporter dashboard by danielqsj in github, we can see that the dashboard panels showing no data in the graphs</p>
 <p>I have setup this dashboard in the past, I wouldn't already know this could have happened because it worked out of the box that time.</p>
 <p>So I have some questions. Does the dashboard has configuration problem? Or the metric endpoints are lacking metrics?</p>
@@ -480,7 +501,7 @@ b)  <a href="https://stackoverflow.com/questions/71666294/kafka-replication-fact
 <p>the problem is that it does not emit the metric when there is no consumer lag, this non-standard way of metric endpoint always cause more troubleshooting time than needed, it can still emit the metric with 0 consumer lag but the author of the code chose not to</p>
 <p>The book Kafka The Definitive Guide 2nd Edition Chaper 13 Metrics Basic Application Health Checks mentions, the lack of metrics could cause by failure of the monitoring system itself. We can monitor the metric endpoint over time, however that is really a hassle to setup</p>
 <p>Conclusion is that the Kafka Exporter (consumer lag) metric endpoint and dashboard are working</p>
-<h1>Kafka is difficult</h1>
+<h1 id="kafka-is-difficult">Kafka is difficult</h1>
 <p>Kafka can be challenging to use for several reasons:</p>
 <ol>
 <li>
