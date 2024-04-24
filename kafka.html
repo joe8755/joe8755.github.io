@@ -22,7 +22,7 @@
 <meta property="og:description" content="Kafka Table of Contents Kafka How Kafka works To store messages reliably Number of Brokers and Partitions number of partitions Log retention Time-based retention Size-based retention Closing log segment log.segment.bytes log.roll.ms Retention Policy Cleanup Policy OS Tuning Garbage Collector Commits and Offsets Using interceptors Creating topic …" />
 <meta property="og:site_name" content="joe&#39;s blog" />
 <meta property="og:article:author" content="joe" />
-<meta property="og:article:published_time" content="2024-04-12T10:20:00+08:00" />
+<meta property="og:article:published_time" content="2024-04-23T10:20:00+08:00" />
 <meta name="twitter:title" content="Kafka ">
 <meta name="twitter:description" content="Kafka Table of Contents Kafka How Kafka works To store messages reliably Number of Brokers and Partitions number of partitions Log retention Time-based retention Size-based retention Closing log segment log.segment.bytes log.roll.ms Retention Policy Cleanup Policy OS Tuning Garbage Collector Commits and Offsets Using interceptors Creating topic …">
 
@@ -118,7 +118,7 @@
 <li><a href="#troubleshooting-kafka-consumer-lag-exporter-dashboard">Troubleshooting Kafka Consumer Lag Exporter Dashboard</a></li>
 </ul>
 </li>
-<li><a href="#kafka-is-difficult">Kafka is difficult</a></li>
+<li><a href="#chatgpt-35-on-why-it-is-difficult-to-use-kafka">ChatGpt 3.5 on why it is difficult to use Kafka</a></li>
 </ul>
 </div>
 <h1 id="how-kafka-works">How Kafka works</h1>
@@ -567,7 +567,7 @@ number of connections</code> the brokers makes</p>
 <p>the problem is that it does not emit the metric when there is no consumer lag, this non-standard way of metric endpoint always cause more troubleshooting time than needed, it can still emit the metric with 0 consumer lag but the author of the code chose not to</p>
 <p>The book Kafka The Definitive Guide 2nd Edition Chaper 13 Metrics Basic Application Health Checks mentions, the lack of metrics could cause by failure of the monitoring system itself. We can monitor the metric endpoint over time, however that is really a hassle to setup</p>
 <p>Conclusion is that the Kafka Exporter (consumer lag) metric endpoint and dashboard are working</p>
-<h1 id="kafka-is-difficult">Kafka is difficult</h1>
+<h1 id="chatgpt-35-on-why-it-is-difficult-to-use-kafka">ChatGpt 3.5 on why it is difficult to use Kafka</h1>
 <p>Kafka can be challenging to use for several reasons:</p>
 <ol>
 <li>
@@ -605,7 +605,7 @@ number of connections</code> the brokers makes</p>
         </div>
         <section id="article-sidebar" class="span2">
             <h4>Published</h4>
-            <time itemprop="dateCreated" datetime="2024-04-12T10:20:00+08:00">Fri 12 April 2024</time>
+            <time itemprop="dateCreated" datetime="2024-04-23T10:20:00+08:00">Tue 23 April 2024</time>
             <h4>Category</h4>
             <a class="category-link" href="/categories.html#message-bus-ref">Message-bus</a>
 <h4>Contact</h4>
