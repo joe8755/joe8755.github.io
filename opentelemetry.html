@@ -200,17 +200,33 @@
 <p>exemplars are important to us when we want to find out outliers data, like request with higher latency than average</p>
 <p>note that you need to instrument code in your application for exemplars to work, see</p>
 <ol>
-<li><a href="https://cloud.google.com/stackdriver/docs/managed-prometheus/exemplars#prom-exemplars-write">link</a></li>
-<li><a href="https://github.com/open-telemetry/opentelemetry-java-examples/tree/main/prometheus#prometheus-example">otel java example</a></li>
-<li><a href="https://github.com/open-telemetry/opentelemetry-java-examples/blob/main/prometheus/src/main/java/io/opentelemetry/example/prometheus/ExampleConfiguration.java">java exampleconfiguration</a></li>
-<li><a href="https://github.com/open-telemetry/opentelemetry-java-examples/blob/main/prometheus/src/main/java/io/opentelemetry/example/prometheus/PrometheusExample.java">java prometheusexample</a></li>
-<li><a href="https://prometheus.github.io/client_python/instrumenting/exemplars/">prometheus python exemplar</a></li>
-<li><a href="https://www.youtube.com/watch?v=uBvU_3IeK4k&amp;t=643s">create an exemplar</a></li>
+<li>
+<p><a href="https://cloud.google.com/stackdriver/docs/managed-prometheus/exemplars#prom-exemplars-write">link</a></p>
+</li>
+<li>
+<p><a href="https://github.com/open-telemetry/opentelemetry-java-examples/tree/main/prometheus#prometheus-example">otel java example</a></p>
+</li>
+<li>
+<p><a href="https://github.com/open-telemetry/opentelemetry-java-examples/blob/main/prometheus/src/main/java/io/opentelemetry/example/prometheus/ExampleConfiguration.java">java exampleconfiguration</a></p>
+</li>
+<li>
+<p><a href="https://github.com/open-telemetry/opentelemetry-java-examples/blob/main/prometheus/src/main/java/io/opentelemetry/example/prometheus/PrometheusExample.java">java prometheusexample</a></p>
+</li>
+<li>
+<p><a href="https://prometheus.github.io/client_python/instrumenting/exemplars/">prometheus python exemplar</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/watch?v=uBvU_3IeK4k&amp;t=643s">create an exemplar</a></p>
+</li>
 </ol>
 <p>for more read</p>
 <ol>
-<li><a href="https://grafana.com/docs/grafana/latest/fundamentals/exemplars/">introduction to exemplars</a></li>
-<li><a href="https://grafana.com/blog/2021/03/31/intro-to-exemplars-which-enable-grafana-tempos-distributed-tracing-at-massive-scale/">intro to exemplars blog</a></li>
+<li>
+<p><a href="https://grafana.com/docs/grafana/latest/fundamentals/exemplars/">introduction to exemplars</a></p>
+</li>
+<li>
+<p><a href="https://grafana.com/blog/2021/03/31/intro-to-exemplars-which-enable-grafana-tempos-distributed-tracing-at-massive-scale/">intro to exemplars blog</a></p>
+</li>
 </ol>
 <h2 id="link-loki-traceid-label-to-tempo">link loki traceid label to tempo</h2>
 <p>in loki datasouce, go to derived field and add the following values:</p>
@@ -222,14 +238,22 @@
 <h2 id="tempo-service-graphs-and-span-metrics">tempo service graphs and span metrics</h2>
 <p>there are two ways to add service graphs and span metrics in tempo config</p>
 <ol>
-<li><a href="https://grafana.com/docs/tempo/latest/configuration/#metrics-generator">metrics generator</a></li>
-<li><a href="https://grafana.com/docs/tempo/latest/configuration/#standard-overrides">overrides</a></li>
+<li>
+<p><a href="https://grafana.com/docs/tempo/latest/configuration/#metrics-generator">metrics generator</a></p>
+</li>
+<li>
+<p><a href="https://grafana.com/docs/tempo/latest/configuration/#standard-overrides">overrides</a></p>
+</li>
 </ol>
 <p>service graphs and span metrics configuration parameters in tempo are not as useful as the counterpart in opentelemetry collector, primarily we want to configure <em>p99 latency</em> and <em>higher latency value for exemplar</em></p>
 <p>by default, if <code>metrics generatorr</code> is enabled in helm chart <code>values.yaml</code>, the <code>service graphs</code> and <code>span metrics</code> will be added to tempo config under <code>overrides</code></p>
 <ol>
-<li><a href="https://github.com/grafana/helm-charts/issues/1987">github issue link 1</a></li>
-<li><a href="https://github.com/grafana/helm-charts/issues/2286">link 2</a></li>
+<li>
+<p><a href="https://github.com/grafana/helm-charts/issues/1987">github issue link 1</a></p>
+</li>
+<li>
+<p><a href="https://github.com/grafana/helm-charts/issues/2286">link 2</a></p>
+</li>
 </ol>
 <div class="highlight"><pre><span></span><code><span class="n">overrides</span><span class="o">:</span>
 <span class="w">      </span><span class="n">per_tenant_override_config</span><span class="o">:</span><span class="w"> </span><span class="sr">/conf/</span><span class="n">overrides</span><span class="o">.</span><span class="na">yaml</span>
@@ -283,9 +307,15 @@
 <p>the duration (p90) in the table is also not useful as we want to see <em>p99 latency</em></p>
 <p>need to research how to achieve these two objectives in tempo or opentelemetry collector</p>
 <ol>
-<li><a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/23872">github issue link 1</a></li>
-<li><a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/28852">link 2</a></li>
-<li><a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/connector/spanmetricsconnector">span metrics connector link</a></li>
+<li>
+<p><a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/23872">github issue link 1</a></p>
+</li>
+<li>
+<p><a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/28852">link 2</a></p>
+</li>
+<li>
+<p><a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/connector/spanmetricsconnector">span metrics connector link</a></p>
+</li>
 </ol>
 <h3 id="find-requests-with-higher-than-usual-latency">find requests with higher than usual latency</h3>
 <p>We are interested in finding out the duration of many requests in an overview</p>
@@ -310,8 +340,12 @@
 <h2 id="csharp-dotnet">CSharp Dotnet</h2>
 <p>the exporter for each back-end is configured in code or environment variable</p>
 <ol>
-<li><a href="https://opentelemetry.io/docs/languages/net/automatic/instrumentations/">Available instrumentations</a></li>
-<li><a href="https://opentelemetry.io/docs/languages/net/automatic/config/">Configuration and settings</a></li>
+<li>
+<p><a href="https://opentelemetry.io/docs/languages/net/automatic/instrumentations/">Available instrumentations</a></p>
+</li>
+<li>
+<p><a href="https://opentelemetry.io/docs/languages/net/automatic/config/">Configuration and settings</a></p>
+</li>
 </ol>
 <p>the following is an example of configuration in code:</p>
 <div class="highlight"><pre><span></span><code>using OpenTelemetry.Logs;
@@ -342,8 +376,12 @@ builder.Services.AddOpenTelemetry()
 <p>It could be due to the dependency injection not being handled explicitly by the aspnetcore library (I could be wrong). Expecting that if this is fixed, there will be an extra flag for Logging in <code>appsettings.json</code></p>
 <p>Quote from below links in github <code>opentelemetry-dotnet docs logs</code> (different from <code>opentelemetry-dotnet examples</code>,</p>
 <ol>
-<li><a href="https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/logs/getting-started-aspnetcore">Getting Started with OpenTelemetry .NET Logs in 5 Minutes - ASP.NET Core Application</a></li>
-<li><a href="https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/docs/logs/getting-started-console/README.md">Getting Started with OpenTelemetry .NET Logs in 5 Minutes - Console Application</a></li>
+<li>
+<p><a href="https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/docs/logs/getting-started-aspnetcore">Getting Started with OpenTelemetry .NET Logs in 5 Minutes - ASP.NET Core Application</a></p>
+</li>
+<li>
+<p><a href="https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/docs/logs/getting-started-console/README.md">Getting Started with OpenTelemetry .NET Logs in 5 Minutes - Console Application</a></p>
+</li>
 </ol>
 <blockquote>
 <p>There are cases where logging is needed before the dependency injection (DI) logging pipeline is available (e.g. before builder.Build()) or after the DI logging pipeline is disposed (e.g. after app.Run()). The common practice is to use a separate logging pipeline by creating a LoggerFactory instance.</p>
@@ -362,34 +400,50 @@ builder.Services.AddOpenTelemetry()
 </ol>
 <p>Extra links during troubleshooting:</p>
 <ol>
-<li><a href="https://signoz.io/blog/opentelemetry-dotnet-logs/">How to Collect .NET Application Logs with OpenTelemetry</a></li>
-<li><a href="https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/examples">opentelemetry-dotnet examples</a></li>
+<li>
+<p><a href="https://signoz.io/blog/opentelemetry-dotnet-logs/">How to Collect .NET Application Logs with OpenTelemetry</a></p>
+</li>
+<li>
+<p><a href="https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/examples">opentelemetry-dotnet examples</a></p>
+</li>
 </ol>
 <h1 id="troubleshooting-showing-spans-in-table-in-tempo">Troubleshooting Showing Spans in table in Tempo</h1>
 <ol>
-<li><a href="https://www.google.com/search?q=trace+how+to+view+by+span+duration+tempo">trace how to view by span duration tempo</a>
-    a) <a href="https://community.grafana.com/t/showing-custom-trace-span-attributes-in-table/113898">Showing custom trace/span attributes in table</a>
-    b) <a href="https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/table/">Table</a>
-    c) <a href="https://www.youtube.com/watch?v=PCY7O8EJeJY&amp;t=20s">Deep Dive - Table Panel Visualizations: What Are They? How to Get Started? | Grafana</a></li>
+<li>
+<p><a href="https://www.google.com/search?q=trace+how+to+view+by+span+duration+tempo">trace how to view by span duration tempo</a></p>
+<p>a) <a href="https://community.grafana.com/t/showing-custom-trace-span-attributes-in-table/113898">Showing custom trace/span attributes in table</a></p>
+<p>b) <a href="https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/table/">Table</a></p>
+<p>c) <a href="https://www.youtube.com/watch?v=PCY7O8EJeJY&amp;t=20s">Deep Dive - Table Panel Visualizations: What Are They? How to Get Started? | Grafana</a></p>
+</li>
 </ol>
 <h1 id="troubleshooting-viewing-traces-in-table-with-duration-in-tempo">Troubleshooting Viewing Traces in table with duration in Tempo</h1>
 <ol>
-<li><a href="https://grafana.com/docs/tempo/latest/traceql/query-editor/traceql-editor/">Write TraceQL queries with the editor</a></li>
-<li><a href="https://grafana.com/docs/tempo/latest/traceql/query-editor/traceql-search/">Search traces using TraceQL query builder</a></li>
-<li><a href="https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/">Configure feature toggles</a></li>
-<li><a href="https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/traces/">Traces</a></li>
+<li>
+<p><a href="https://grafana.com/docs/tempo/latest/traceql/query-editor/traceql-editor/">Write TraceQL queries with the editor</a></p>
+</li>
+<li>
+<p><a href="https://grafana.com/docs/tempo/latest/traceql/query-editor/traceql-search/">Search traces using TraceQL query builder</a></p>
+</li>
+<li>
+<p><a href="https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/feature-toggles/">Configure feature toggles</a></p>
+</li>
+<li>
+<p><a href="https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/traces/">Traces</a></p>
+</li>
 </ol>
 <p>Finding out why trace id duration is undefined</p>
 <ol>
-<li><a href="https://www.google.com/search?q=trace+id+duration+undefined+grafana+tempo">trace id duration undefined grafana tempo</a>
-    a) <a href="https://grafana.com/docs/tempo/latest/troubleshooting/unable-to-see-trace/">Unable to find traces</a>
-    b) <a href="https://grafana.com/docs/grafana/latest/explore/trace-integration/">Tracing in Explore</a></li>
+<li>
+<p><a href="https://www.google.com/search?q=trace+id+duration+undefined+grafana+tempo">trace id duration undefined grafana tempo</a></p>
+<p>a) <a href="https://grafana.com/docs/tempo/latest/troubleshooting/unable-to-see-trace/">Unable to find traces</a></p>
+<p>b) <a href="https://grafana.com/docs/grafana/latest/explore/trace-integration/">Tracing in Explore</a></p>
+</li>
 </ol>
 <p>To check whether other language implementation emitted duration data in traces</p>
 <ol>
 <li>
-<p><a href="https://www.google.com/search?q=grafana+tempo+demo">grafana tempo demo</a>
-    a) <a href="https://grafana.com/docs/tempo/latest/getting-started/example-demo-app/">Example setups</a></p>
+<p><a href="https://www.google.com/search?q=grafana+tempo+demo">grafana tempo demo</a></p>
+<p>a) <a href="https://grafana.com/docs/tempo/latest/getting-started/example-demo-app/">Example setups</a></p>
 </li>
 <li>
 <p><a href="https://www.google.com/search?q=grafana+tempo+with+microservices+demo">grafana tempo with microservices demo</a></p>
@@ -397,36 +451,64 @@ builder.Services.AddOpenTelemetry()
 </ol>
 <p>To check why tempo traceid do not show duration</p>
 <ol>
-<li><a href="https://www.google.com/search?q=traceid+dont+have+duration+tempo">traceid dont have duration tempo</a>
-    a) <a href="https://github.com/grafana/tempo/issues/1405">Why can not see traceID from loki?</a>
-    b) <a href="https://community.grafana.com/t/tempo-cant-find-the-traceid/107603">Tempo cant find the traceid</a></li>
+<li>
+<p><a href="https://www.google.com/search?q=traceid+dont+have+duration+tempo">traceid dont have duration tempo</a></p>
+<p>a) <a href="https://github.com/grafana/tempo/issues/1405">Why can not see traceID from loki?</a></p>
+<p>b) <a href="https://community.grafana.com/t/tempo-cant-find-the-traceid/107603">Tempo cant find the traceid</a></p>
+</li>
 </ol>
 <h1 id="troubleshooting-upgrading-grafana-with-persistent-volume-claim">Troubleshooting Upgrading Grafana with persistent volume claim</h1>
+<p>search: <a href="https://www.google.com/search?q=can+we+recover+data+from+persistent+volume+claim+after+pod+deletion">can we recover data from persistent volume claim after pod deletion</a></p>
 <ol>
 <li>
-<p><a href="https://www.google.com/search?q=can+we+recover+data+from+persistent+volume+claim+after+pod+deletion">can we recover data from persistent volume claim after pod deletion</a>
-    a) <a href="https://stackoverflow.com/questions/65210123/how-to-recover-pvreleased-data-after-pvc-deletion">How to recover pv(Released) data after pvc deletion</a>
-    b) <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#retain">Persistent Volumes</a>
-    c) <a href="https://www.google.com/search?q=storage+asset+definition">storage asset definition</a>
-    d) <a href="https://www.google.com/search?q=associated+storage+asset">associated storage asset</a>
-        1. <a href="https://docs.openshift.com/container-platform/4.15/storage/understanding-persistent-storage.html">Understanding persistent storage</a>
-        2. <a href="https://rtfm.co.ua/en/kubernetes-persistentvolume-and-persistentvolumeclaim-an-overview-with-examples/#Deleting_PV_and_PVC_%E2%80%93_an_example">Deleting PV and PVC – an example</a>
-    e) <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/">Persistent Volumes</a>
-    f) <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/">Configure a Pod to Use a PersistentVolume for Storage</a></p>
+<p><a href="https://stackoverflow.com/questions/65210123/how-to-recover-pvreleased-data-after-pvc-deletion">How to recover pv(Released) data after pvc deletion</a></p>
 </li>
 <li>
-<p><a href="https://www.google.com/search?q=kubernetes+volume+snapshot">kubernetes volume snapshot</a>
-    a) <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/volume-snapshots">About volume snapshots</a>
-    b) <a href="https://docs.digitalocean.com/products/kubernetes/how-to/create-snapshots/">How to Create Volume Snapshots in Kubernetes Clusters</a>
-    c) <a href="https://kubernetes-csi.github.io/docs/snapshot-restore-feature.html">Snapshot &amp; Restore Feature</a>
-    d) <a href="https://kubernetes.io/docs/concepts/storage/volume-snapshots/">Volume Snapshots</a>
-    f) <a href="https://kubernetes.io/docs/concepts/storage/volume-snapshot-classes/">Volume Snapshot Classes</a></p>
+<p><a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#retain">Persistent Volumes</a></p>
 </li>
 <li>
-<p><a href="https://www.google.com/search?q=does+persistent+volume+claim+get+reused+when+a+new+pod+start">does persistent volume claim get reused when a new pod start</a>
-    a) <a href="https://stackoverflow.com/questions/73686342/can-i-reuse-same-persistent-volume-for-another-persistentvolumeclaim-with-an-acc">Can I reuse same Persistent Volume for another PersistentVolumeClaim with an access mode of <code>ReadWriteOnce</code>?</a>
-    b) <a href="https://stackoverflow.com/questions/54137629/automatically-reusing-persistent-volume-including-data">Automatically reusing persistent volume including data</a>
-    c) <a href="https://stackoverflow.com/questions/68258438/reuse-pv-in-deployment">Reuse PV in Deployment</a></p>
+<p><a href="https://www.google.com/search?q=storage+asset+definition">storage asset definition</a></p>
+</li>
+<li>
+<p><a href="https://www.google.com/search?q=associated+storage+asset">associated storage asset</a></p>
+<p>a) <a href="https://docs.openshift.com/container-platform/4.15/storage/understanding-persistent-storage.html">Understanding persistent storage</a></p>
+<p>b) <a href="https://rtfm.co.ua/en/kubernetes-persistentvolume-and-persistentvolumeclaim-an-overview-with-examples/#Deleting_PV_and_PVC_%E2%80%93_an_example">Deleting PV and PVC – an example</a></p>
+</li>
+<li>
+<p><a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/">Persistent Volumes</a></p>
+</li>
+<li>
+<p><a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/">Configure a Pod to Use a PersistentVolume for Storage</a></p>
+</li>
+</ol>
+<p>search: <a href="https://www.google.com/search?q=kubernetes+volume+snapshot">kubernetes volume snapshot</a></p>
+<ol>
+<li>
+<p><a href="https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/volume-snapshots">About volume snapshots</a></p>
+</li>
+<li>
+<p><a href="https://docs.digitalocean.com/products/kubernetes/how-to/create-snapshots/">How to Create Volume Snapshots in Kubernetes Clusters</a></p>
+</li>
+<li>
+<p><a href="https://kubernetes-csi.github.io/docs/snapshot-restore-feature.html">Snapshot &amp; Restore Feature</a></p>
+</li>
+<li>
+<p><a href="https://kubernetes.io/docs/concepts/storage/volume-snapshots/">Volume Snapshots</a></p>
+</li>
+<li>
+<p><a href="https://kubernetes.io/docs/concepts/storage/volume-snapshot-classes/">Volume Snapshot Classes</a></p>
+</li>
+</ol>
+<p>search: <a href="https://www.google.com/search?q=does+persistent+volume+claim+get+reused+when+a+new+pod+start">does persistent volume claim get reused when a new pod start</a></p>
+<ol>
+<li>
+<p><a href="https://stackoverflow.com/questions/73686342/can-i-reuse-same-persistent-volume-for-another-persistentvolumeclaim-with-an-acc">Can I reuse same Persistent Volume for another PersistentVolumeClaim with an access mode of <code>ReadWriteOnce</code>?</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/54137629/automatically-reusing-persistent-volume-including-data">Automatically reusing persistent volume including data</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/68258438/reuse-pv-in-deployment">Reuse PV in Deployment</a></p>
 </li>
 </ol>
 <h1 id="temporary-link-reference">Temporary Link Reference</h1>

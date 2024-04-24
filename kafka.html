@@ -19,12 +19,12 @@
 
 <meta property="og:title" content="Kafka "/>
 <meta property="og:url" content="/kafka.html" />
-<meta property="og:description" content="Kafka Table of Contents Kafka How Kafka works To store messages reliably Number of Brokers and Partitions Log retention Time-based retention Size-based retention Closing log segment log.segment.bytes log.roll.ms Retention Policy Cleanup Policy OS Tuning Garbage Collector Commits and Offsets Using interceptors Creating topic programmatically or via …" />
+<meta property="og:description" content="Kafka Table of Contents Kafka How Kafka works To store messages reliably Number of Brokers and Partitions number of partitions Log retention Time-based retention Size-based retention Closing log segment log.segment.bytes log.roll.ms Retention Policy Cleanup Policy OS Tuning Garbage Collector Commits and Offsets Using interceptors Creating topic …" />
 <meta property="og:site_name" content="joe&#39;s blog" />
 <meta property="og:article:author" content="joe" />
 <meta property="og:article:published_time" content="2024-04-12T10:20:00+08:00" />
 <meta name="twitter:title" content="Kafka ">
-<meta name="twitter:description" content="Kafka Table of Contents Kafka How Kafka works To store messages reliably Number of Brokers and Partitions Log retention Time-based retention Size-based retention Closing log segment log.segment.bytes log.roll.ms Retention Policy Cleanup Policy OS Tuning Garbage Collector Commits and Offsets Using interceptors Creating topic programmatically or via …">
+<meta name="twitter:description" content="Kafka Table of Contents Kafka How Kafka works To store messages reliably Number of Brokers and Partitions number of partitions Log retention Time-based retention Size-based retention Closing log segment log.segment.bytes log.roll.ms Retention Policy Cleanup Policy OS Tuning Garbage Collector Commits and Offsets Using interceptors Creating topic …">
 
         <title>Kafka  · joe&#39;s blog
 </title>
@@ -82,7 +82,10 @@
 <li><a href="#kafka">Kafka</a></li>
 <li><a href="#how-kafka-works">How Kafka works</a></li>
 <li><a href="#to-store-messages-reliably">To store messages reliably</a></li>
-<li><a href="#number-of-brokers-and-partitions">Number of Brokers and Partitions</a></li>
+<li><a href="#number-of-brokers-and-partitions">Number of Brokers and Partitions</a><ul>
+<li><a href="#number-of-partitions">number of partitions</a></li>
+</ul>
+</li>
 <li><a href="#log-retention">Log retention</a><ul>
 <li><a href="#time-based-retention">Time-based retention</a></li>
 <li><a href="#size-based-retention">Size-based retention</a></li>
@@ -128,8 +131,8 @@
 <ol>
 <li>
 <p>Partition 1</p>
-<p>a) Leader: Broker A
-b) Followers: Broker B, Broker C</p>
+<p>a) Leader: Broker A</p>
+<p>b) Followers: Broker B, Broker C</p>
 </li>
 </ol>
 <p>Leader of the partition, that particular broker, will be the first to write messages, then followers will sync with the leader</p>
@@ -139,18 +142,18 @@ b) Followers: Broker B, Broker C</p>
 <ol>
 <li>
 <p>Partition 1</p>
-<p>a) Leader: Broker A
-b) Followers: Broker B, Broker C</p>
+<p>a) Leader: Broker A</p>
+<p>b) Followers: Broker B, Broker C</p>
 </li>
 <li>
 <p>Partition 2</p>
-<p>a) Leader: Broker B
-b) Followers: Broker A, Broker C</p>
+<p>a) Leader: Broker B</p>
+<p>b) Followers: Broker A, Broker C</p>
 </li>
 <li>
 <p>Partition 3</p>
-<p>a) Leader: Broker C
-b) Followers: Broker A, Broker B</p>
+<p>a) Leader: Broker C</p>
+<p>b) Followers: Broker A, Broker B</p>
 </li>
 </ol>
 <p>A producer/consumer can produce/consume messages to all these brokers simulaneously. High throughput is achieved because the leaders of partitions spread across all the brokers</p>
@@ -180,30 +183,35 @@ b) Followers: Broker A, Broker B</p>
 </li>
 <li>
 <p><code>unclean.leader.election.enable = false (default is false)</code></p>
-<p>a)  to prevent any out-of-sync replica becoming the leader and
-    causing data loss</p>
+<p>a)  to prevent any out-of-sync replica becoming the leader and causing data loss</p>
 </li>
 </ol>
 <p>For the producers:</p>
-<p>1)  <code>acks=all</code></p>
-<p>2)  <code>retries=MAX_INT (default unsure)</code></p>
-<div class="highlight"><pre><span></span><code>a)  effectively infinite
-</code></pre></div>
-
-<p>3)  <code>delivery.timeout.ms</code></p>
-<div class="highlight"><pre><span></span><code><span class="nv">a</span><span class="ss">)</span><span class="w">  </span><span class="nv">configure</span><span class="w"> </span><span class="nv">maximum</span><span class="w"> </span><span class="nv">amount</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">time</span><span class="w"> </span><span class="nv">we</span><span class="w"> </span><span class="nv">can</span><span class="w"> </span><span class="nv">tolerate</span><span class="w"> </span><span class="k">until</span><span class="w"> </span><span class="nv">giving</span><span class="w"> </span><span class="nv">up</span><span class="w"> </span><span class="nv">on</span><span class="w"> </span><span class="nv">sending</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="nv">message</span>
-</code></pre></div>
-
-<p>4)  <code>enable.idempotence = true</code></p>
-<div class="highlight"><pre><span></span><code><span class="nv">a</span><span class="ss">)</span><span class="w">  </span><span class="nv">brokers</span><span class="w"> </span><span class="nv">will</span><span class="w"> </span><span class="nv">use</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">additional</span><span class="w"> </span><span class="nv">information</span><span class="w"> </span><span class="nv">sent</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="nv">producer</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">skip</span><span class="w"> </span><span class="nv">duplicate</span><span class="w"> </span><span class="nv">messages</span><span class="w"> </span><span class="nv">caused</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="nv">retries</span>,<span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">more</span>,<span class="w"> </span><span class="nv">read</span><span class="w"> </span><span class="nv">Chapter</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">book</span><span class="w"> </span><span class="nv">Kafka</span><span class="w"> </span><span class="nv">The</span><span class="w"> </span><span class="nv">Definitive</span><span class="w"> </span><span class="nv">Guide</span><span class="w"> </span><span class="mi">2</span><span class="nv">nd</span><span class="w"> </span><span class="nv">Edition</span>
-<span class="nv">b</span><span class="ss">)</span><span class="w">  </span><span class="nv">This</span><span class="w"> </span><span class="nv">can</span><span class="w"> </span><span class="nv">also</span><span class="w"> </span><span class="nv">guarantee</span><span class="w"> </span><span class="nv">message</span><span class="w"> </span><span class="nv">ordering</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="nv">up</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="nv">in</span><span class="o">-</span><span class="nv">flight</span><span class="w"> </span><span class="nv">requests</span>,<span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">confirm</span>,<span class="w"> </span><span class="nv">read</span><span class="w"> </span><span class="nv">Chapter</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">book</span><span class="w"> </span><span class="nv">Kafka</span><span class="w"> </span><span class="nv">The</span><span class="w"> </span><span class="nv">Definitive</span><span class="w"> </span><span class="nv">Guide</span><span class="w"> </span><span class="mi">2</span><span class="nv">nd</span><span class="w"> </span><span class="nv">Edition</span>
-</code></pre></div>
-
-<p>5)  <code>max.inflight.requests = 5 or lower (default is 5)</code></p>
-<p>6)  <code>max.inflight.requests.per.connections = 5 or lower (default is 5)</code></p>
-<div class="highlight"><pre><span></span><code>a)  at least 2 to maximize throughput (performance)
-</code></pre></div>
-
+<ol>
+<li>
+<p><code>acks=all</code></p>
+</li>
+<li>
+<p><code>retries=MAX_INT (default unsure)</code></p>
+<p>a)  effectively infinite</p>
+</li>
+<li>
+<p><code>delivery.timeout.ms</code></p>
+<p>a)  configure maximum amount of time we can tolerate until giving up on sending a message</p>
+</li>
+<li>
+<p><code>enable.idempotence = true</code></p>
+<p>a)  brokers will use the additional information sent by producer to skip duplicate messages caused by retries, for more, read Chapter 8 of the book Kafka The Definitive Guide 2nd Edition</p>
+<p>b)  This can also guarantee message ordering with up to 5 in-flight requests, to confirm, read Chapter 3 of the book Kafka The Definitive Guide 2nd Edition</p>
+</li>
+<li>
+<p><code>max.inflight.requests = 5 or lower (default is 5)</code></p>
+</li>
+<li>
+<p><code>max.inflight.requests.per.connections = 5 or lower (default is 5)</code></p>
+<p>a)  at least 2 to maximize throughput (performance)</p>
+</li>
+</ol>
 <p>For the consumers:</p>
 <ol>
 <li>
@@ -212,56 +220,88 @@ b) Followers: Broker A, Broker B</p>
 </li>
 </ol>
 <h1 id="number-of-brokers-and-partitions">Number of Brokers and Partitions</h1>
-<p>Number of brokers depending on:</p>
+<p>number of brokers can be determined by the following factors</p>
+<p><strong>Disk capacity</strong></p>
 <ol>
-<li>Disk capacity
-    a) how much is required by for retaining messages and how much storage is available on a single broker
-    b) if need to retain 10TB, a single broker can store 2TB, we need 5 brokers
-        1. increasing replication factor (RF) will increase storage requirement by at least 100%
-        2. with RF = 2, we need 10 brokers then</li>
-<li>Replica capacity per broker</li>
-<li>CPU capacity
-    a) CPU is usually not a major bottleneck, but it can be when there is excessive amount of client connections and requests on a broker
-        1. monitor overall CPU usage based on number of unique clients and consumer groups, increase cluster size to meet those needs can improve performance</li>
-<li>Network capacity
-    a) capacity of network interfaces,  whether they can handle client traffic if there are many consumers
-    b) if the traffic is not consistent over the retention period (burst during peak hours)
-        1. if capacity is utilized fully during peak on a single broker, the consumers might not be able to consume at high throughput, more than 1 broker is needed to maintain high throughput for many consumers
-    c) if RF&gt;1, need to consider additional consumer of the data</li>
-<li>how cluster handle requests
-    a) 10 brokers, over 1m replicas (500k partitions with RF=2), each broker has 100k replicas, evenly balanced scenario
-        1. bottlenecks in produce, consume and controller queues
-    b) in the past, no more than 4k replicas per broker and no more than 200k replicas per cluster
-    c) now, well-configured kafka, no more than 14k replicas per broker and 1m replicas per cluster</li>
+<li>
+<p>how much is required by for retaining messages and how much storage is available on a single broker</p>
+</li>
+<li>
+<p>if need to retain 10TB, a single broker can store 2TB, we need 5 brokers</p>
+<p>a) increasing replication factor (RF) will increase storage requirement by at least 100%</p>
+<p>b) with RF = 2, we need 10 brokers then</p>
+</li>
 </ol>
-<p>Also, considering adding more brokers to handle IO and memory bottlenecks to improve performance</p>
-<p><strong>number of partitions</strong></p>
+<p><strong>Replica capacity per broker</strong></p>
+<p><strong>CPU capacity</strong></p>
+<ol>
+<li>
+<p>CPU is usually not a major bottleneck, but it can be when there is excessive amount of client connections and requests on a broker</p>
+<p>a) monitor overall CPU usage based on number of unique clients and consumer groups, increase cluster size to meet those needs can improve performance</p>
+</li>
+</ol>
+<p><strong>Network capacity</strong></p>
+<ol>
+<li>
+<p>capacity of network interfaces,  whether they can handle client traffic if there are many consumers</p>
+</li>
+<li>
+<p>if the traffic is not consistent over the retention period (burst during peak hours)</p>
+<p>a) if capacity is utilized fully during peak on a single broker, the consumers might not be able to consume at high throughput, more than 1 broker is needed to maintain high throughput for many consumers</p>
+</li>
+<li>
+<p>if RF&gt;1, need to consider additional consumer of the data</p>
+</li>
+</ol>
+<p><strong>how cluster handle requests</strong></p>
+<ol>
+<li>
+<p>10 brokers, over 1m replicas (500k partitions with RF=2), each broker has 100k replicas, evenly balanced scenario</p>
+<p>a) bottlenecks in produce, consume and controller queues</p>
+</li>
+<li>
+<p>in the past, no more than 4k replicas per broker and no more than 200k replicas per cluster</p>
+</li>
+<li>
+<p>now, well-configured kafka, no more than 14k replicas per broker and 1m replicas per cluster</p>
+</li>
+</ol>
+<p><strong>Also, considering adding more brokers to handle IO and memory bottlenecks to improve performance</strong></p>
+<h2 id="number-of-partitions">number of partitions</h2>
 <p>Note that number of partitions can only be increased, never decreased. Manually create the topic with fewer partition carefully if needed</p>
 <p>Parition count of a topic can be equal to, or multiple of the number of brokers (evenly distributing message load), you can also balance message load by having multiple topics</p>
 <p>Factors affect number of partitions including:</p>
 <ol>
-<li>throughput for a single topic
-    a) expect to write 100KBps or 1GBps?</li>
-<li>max throughput consuming from a single partition
-    a) this is also limited by IO of the destination, e.g. database</li>
-<li>max throughput for a producer for a single partition
-    a) producers are typically faster than consumers, can skip this</li>
-<li>sending messages based on keys, adding partitions later can be difficult<ul>
-<li>calculate throughput based on expected future usage, not current usage</li>
-</ul>
+<li>
+<p>throughput for a single topic</p>
+<p>a) expect to write 100KBps or 1GBps?</p>
 </li>
-<li>check available diskspace and network bandwidth per broker for the expected number of partitions</li>
-<li>don't overestimate number of partitions, they use memory and other resources in the brokers<ul>
-<li>they will increase the time for metadata updates and leadership transfers</li>
-</ul>
+<li>
+<p>max throughput consuming from a single partition</p>
+<p>a) this is also limited by IO of the destination, e.g. database</p>
 </li>
-<li>mirroring data?<ul>
-<li>consider throughput of the mirroring config, larger partitions can be a bottleneck</li>
-</ul>
+<li>
+<p>max throughput for a producer for a single partition</p>
+<p>a) producers are typically faster than consumers, can skip this</p>
 </li>
-<li>cloud services?<ul>
-<li>IOPS limits in the VM, having too many partitions increase the amount of IOPS due to parallelism</li>
-</ul>
+<li>
+<p>sending messages based on keys, adding partitions later can be difficult</p>
+<p>a) calculate throughput based on expected future usage, not current usage</p>
+</li>
+<li>
+<p>check available diskspace and network bandwidth per broker for the expected number of partitions</p>
+</li>
+<li>
+<p>don't overestimate number of partitions, they use memory and other resources in the brokers</p>
+<p>a) they will increase the time for metadata updates and leadership transfers</p>
+</li>
+<li>
+<p>mirroring data?</p>
+<p>a) consider throughput of the mirroring config, larger partitions can be a bottleneck</p>
+</li>
+<li>
+<p>cloud services?</p>
+<p>a) IOPS limits in the VM, having too many partitions increase the amount of IOPS due to parallelism</p>
 </li>
 </ol>
 <p>You want too many partitions, but not too many</p>
@@ -278,14 +318,12 @@ b) Followers: Broker A, Broker B</p>
 <h2 id="size-based-retention">Size-based retention</h2>
 <p>Size-based retention's parameter is <code>log.retention.bytes</code></p>
 <p><code>log.retention.bytes</code> is applied per partition</p>
-<p>A topic with 8 partitions and log.retention.bytes is set to 1GB, the
-topic size is 8GB (8*1GB)</p>
+<p>A topic with 8 partitions and log.retention.bytes is set to 1GB, the topic size is 8GB (8*1GB)</p>
 <p>Note that retention is for individual partition, not the topic, so increasing the number of partitions will increase the disk size usage if sized-based retention is used</p>
 <p>Setting <code>log.retention.bytes</code> to -1 allows for infinite retentions</p>
 <h2 id="closing-log-segment">Closing log segment</h2>
 <h3 id="logsegmentbytes">log.segment.bytes</h3>
-<p>log segment is closed (and be considered to be deleted) when
-<code>log.segment.bytes</code> is reached, default to 1GB.</p>
+<p>log segment is closed (and be considered to be deleted) when <code>log.segment.bytes</code> is reached, default to 1GB.</p>
 <p>Smaller <code>log.segment.bytes</code> means that the file will be closed and new file will be opened more often, this will reduce overall efficiency of disk writes</p>
 <p>The time to that log segment is deleted is calculated as (<code>log.segment.bytes</code> limit reached + <code>log.retention.ms</code>)</p>
 <p>If it takes 10 days to reach <code>log.segment.bytes</code> of 1GB (100MB per day), with 7 days of <code>log.retention.ms</code>, total time to delete the log segment would be 17 days</p>
@@ -303,24 +341,24 @@ topic size is 8GB (8*1GB)</p>
 <p>It is also possible to specify both policies in a comma-separated list (e.g. “delete,compact”).</p>
 <ol>
 <li>
-<p><a href="https://www.google.com/search?q=compact+or+delete+topic+kafka">compact or delete topic kafka</a>
-    a) <a href="https://docs.confluent.io/platform/current/installation/configuration/topic-configs.html">Kafka Topic Configuration Reference for Confluent Platform</a>
-    b) <a href="https://forum.confluent.io/t/cleanup-policy-of-compact-and-delete/868">Cleanup Policy of compact AND delete</a></p>
+<p><a href="https://www.google.com/search?q=compact+or+delete+topic+kafka">compact or delete topic kafka</a></p>
+<p>a) <a href="https://docs.confluent.io/platform/current/installation/configuration/topic-configs.html">Kafka Topic Configuration Reference for Confluent Platform</a></p>
+<p>b) <a href="https://forum.confluent.io/t/cleanup-policy-of-compact-and-delete/868">Cleanup Policy of compact AND delete</a></p>
 </li>
 <li>
-<p><a href="https://www.google.com/search?q=Compacted+topic+cannot+accept+message+without+key+in+topic+partition">Compacted topic cannot accept message without key in topic partition</a>
-    a) <a href="https://groups.google.com/g/debezium/c/P_cUGYqSpX0">Compacted topic cannot accept message without key in topic partition</a>
-    b) <a href="https://lists.apache.org/thread/0nwtcr8kx1hlkn2wokv3tvn2rrp9y97q">Re: Compacted topic cannot accept message without key</a></p>
+<p><a href="https://www.google.com/search?q=Compacted+topic+cannot+accept+message+without+key+in+topic+partition">Compacted topic cannot accept message without key in topic partition</a></p>
+<p>a) <a href="https://groups.google.com/g/debezium/c/P_cUGYqSpX0">Compacted topic cannot accept message without key in topic partition</a></p>
+<p>b) <a href="https://lists.apache.org/thread/0nwtcr8kx1hlkn2wokv3tvn2rrp9y97q">Re: Compacted topic cannot accept message without key</a></p>
 </li>
 <li>
 <p><a href="https://stackoverflow.com/questions/63009907/kafka-uncompacted-topics-vs-compacted-topics">Kafka - uncompacted topics Vs compacted topics</a></p>
 </li>
 <li>
-<p><a href="https://www.google.com/search?q=broker+failed+to+validate+record">broker failed to validate record</a>
-    a) <a href="https://stackoverflow.com/questions/72797644/kafka-broker-failed-to-validate-record-after-increasing-partition">Kafka: "Broker failed to validate record" after increasing partition</a>
-    b) <a href="https://stackoverflow.com/questions/77256115/kafka-schema-registry-broker-broker-failed-to-validate-record">Kafka schema registry - Broker: Broker failed to validate record</a>
-    c) <a href="https://forum.confluent.io/t/cleanup-policy-of-compact-and-delete/868">Cleanup Policy of compact AND delete</a>
-    d) <a href="https://docs.confluent.io/platform/current/installation/configuration/topic-configs.html">Kafka Topic Configuration Reference for Confluent Platform</a></p>
+<p><a href="https://www.google.com/search?q=broker+failed+to+validate+record">broker failed to validate record</a></p>
+<p>a) <a href="https://stackoverflow.com/questions/72797644/kafka-broker-failed-to-validate-record-after-increasing-partition">Kafka: "Broker failed to validate record" after increasing partition</a></p>
+<p>b) <a href="https://stackoverflow.com/questions/77256115/kafka-schema-registry-broker-broker-failed-to-validate-record">Kafka schema registry - Broker: Broker failed to validate record</a></p>
+<p>c) <a href="https://forum.confluent.io/t/cleanup-policy-of-compact-and-delete/868">Cleanup Policy of compact AND delete</a></p>
+<p>d) <a href="https://docs.confluent.io/platform/current/installation/configuration/topic-configs.html">Kafka Topic Configuration Reference for Confluent Platform</a></p>
 </li>
 </ol>
 <p>further in the book KTDG2E on page 122, 128, 150, 156, 159</p>
@@ -366,13 +404,17 @@ number of connections</code> the brokers makes</p>
 <h1 id="garbage-collector">Garbage Collector</h1>
 <p>To-do</p>
 <h1 id="commits-and-offsets">Commits and Offsets</h1>
-<p>To-do, Chapter 4 of Kafka The Definitive Guide 2^nd^ Edition</p>
+<p>To-do, Chapter 4 of Kafka The Definitive Guide 2nd Edition</p>
 <h1 id="using-interceptors">Using interceptors</h1>
 <p>The interceptor that we can use is producer record and acknowledgement</p>
 <p>Why we want to use the interceptor? To record these two metrics</p>
 <ul>
-<li>when producer send the message to Kafka before the serialization happens</li>
-<li>when Kafka responds with an acknowledgement to the producer, this does not allow modification</li>
+<li>
+<p>when producer send the message to Kafka before the serialization happens</p>
+</li>
+<li>
+<p>when Kafka responds with an acknowledgement to the producer, this does not allow modification</p>
+</li>
 </ul>
 <p>In Java, the interceptor can be applied without changing client code, with classpath, jar file and config. I am not sure about other languages. For more, read Chapter 3 of the book Kafka The Definitive Guide 2nd Edition</p>
 <h1 id="creating-topic-programmatically-or-via-an-admin-client">Creating topic programmatically or via an admin client</h1>
@@ -401,34 +443,58 @@ number of connections</code> the brokers makes</p>
 <p><a href="https://stackoverflow.com/questions/29511521/is-key-required-as-part-of-sending-messages-to-kafka">Is key required as part of sending messages to Kafka?</a></p>
 </li>
 <li>
-<p><a href="https://www.google.com/search?q=idempotent+all+partitions+or+need+to+use+key+kafka">idempotent all partitions or need to use key kafka</a>
-    a) <a href="https://stackoverflow.com/questions/74092535/what-is-use-of-the-idempotent-producer-in-kafka">What is use of the idempotent producer in kafka?</a></p>
+<p><a href="https://www.google.com/search?q=idempotent+all+partitions+or+need+to+use+key+kafka">idempotent all partitions or need to use key kafka</a></p>
+<p>a) <a href="https://stackoverflow.com/questions/74092535/what-is-use-of-the-idempotent-producer-in-kafka">What is use of the idempotent producer in kafka?</a></p>
 </li>
 <li>
-<p><a href="https://stackoverflow.com/questions/61832615/kafka-message-ordering-guarantees/61832820#61832820">Kafka - Message Ordering Guarantees</a>
-    a) <a href="https://stackoverflow.com/questions/49982786/ordering-guarantees-when-using-idempotent-kafka-producer">Ordering guarantees when using idempotent Kafka Producer</a></p>
+<p><a href="https://stackoverflow.com/questions/61832615/kafka-message-ordering-guarantees/61832820#61832820">Kafka - Message Ordering Guarantees</a></p>
+<p>a) <a href="https://stackoverflow.com/questions/49982786/ordering-guarantees-when-using-idempotent-kafka-producer">Ordering guarantees when using idempotent Kafka Producer</a></p>
 </li>
 </ol>
 <h1 id="schema-of-messages">Schema of Messages</h1>
 <p>Schema of messages are like API specs, it is needed especially in the future to scale for communication between producers (upstream) and consumers (downstream)</p>
 <p>It is better to use Avro and schema registry endpoint might have to be setup</p>
 <ol>
-<li><a href="https://www.confluent.io/kafka-summit-san-francisco-2019/how-kroger-embraced-a-schema-first-philosophy-in-building-real-time-data-pipelines/">How Kroger embraced a "schema first" philosophy in building real-time data pipelines</a></li>
-<li><a href="https://old.reddit.com/r/apachekafka/comments/g9xiqa/avro_benefits_and_schema_management/">Avro benefits and schema management (self.apachekafka)</a></li>
-<li><a href="https://github.com/eishay/jvm-serializers/wiki">jvm-serializers</a></li>
-<li><a href="https://old.reddit.com/r/apachespark/comments/twsouf/kafka_avro_evolving_schemas/">Kafka + Avro Evolving Schemas (self.apachespark)</a></li>
-<li><a href="https://old.reddit.com/r/apachekafka/comments/zks0b4/how_to_handle_failing_message_in_a_topic_with/">How to handle failing message in a topic with Avro schema?</a></li>
-<li><a href="https://old.reddit.com/r/apachekafka/comments/qfpxb9/schema_registryless_avro_python_produced_messages/">Schema Registry-less Avro Python Produced Messages - JDBC Sink Connector Deserialize issues</a></li>
-<li><a href="https://stackoverflow.com/questions/45635726/kafkaavroserializer-for-serializing-avro-without-schema-registry-url">KafkaAvroSerializer for serializing Avro without schema.registry.url</a></li>
-<li><a href="https://avro.apache.org/docs/1.7.7/spec.html#Schema+Resolution">Schema Resolution</a></li>
+<li>
+<p><a href="https://www.confluent.io/kafka-summit-san-francisco-2019/how-kroger-embraced-a-schema-first-philosophy-in-building-real-time-data-pipelines/">How Kroger embraced a "schema first" philosophy in building real-time data pipelines</a></p>
+</li>
+<li>
+<p><a href="https://old.reddit.com/r/apachekafka/comments/g9xiqa/avro_benefits_and_schema_management/">Avro benefits and schema management (self.apachekafka)</a></p>
+</li>
+<li>
+<p><a href="https://github.com/eishay/jvm-serializers/wiki">jvm-serializers</a></p>
+</li>
+<li>
+<p><a href="https://old.reddit.com/r/apachespark/comments/twsouf/kafka_avro_evolving_schemas/">Kafka + Avro Evolving Schemas (self.apachespark)</a></p>
+</li>
+<li>
+<p><a href="https://old.reddit.com/r/apachekafka/comments/zks0b4/how_to_handle_failing_message_in_a_topic_with/">How to handle failing message in a topic with Avro schema?</a></p>
+</li>
+<li>
+<p><a href="https://old.reddit.com/r/apachekafka/comments/qfpxb9/schema_registryless_avro_python_produced_messages/">Schema Registry-less Avro Python Produced Messages - JDBC Sink Connector Deserialize issues</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/45635726/kafkaavroserializer-for-serializing-avro-without-schema-registry-url">KafkaAvroSerializer for serializing Avro without schema.registry.url</a></p>
+</li>
+<li>
+<p><a href="https://avro.apache.org/docs/1.7.7/spec.html#Schema+Resolution">Schema Resolution</a></p>
+</li>
 </ol>
 <h1 id="authentication-and-encryption">Authentication and Encryption</h1>
 <p>Kafka supports four security protocols</p>
 <ol>
-<li><strong>PLAINTEXT:</strong> no encryption, no authentication</li>
-<li><strong>SSL:</strong> encrypted, authentication optional</li>
-<li><strong>SASL_PLAINTEXT:</strong> no encryption, authenticated</li>
-<li><strong>SASL_SSL:</strong> encrypted, authenticated. Suitable for external network</li>
+<li>
+<p><strong>PLAINTEXT:</strong> no encryption, no authentication</p>
+</li>
+<li>
+<p><strong>SSL:</strong> encrypted, authentication optional</p>
+</li>
+<li>
+<p><strong>SASL_PLAINTEXT:</strong> no encryption, authenticated</p>
+</li>
+<li>
+<p><strong>SASL_SSL:</strong> encrypted, authenticated. Suitable for external network</p>
+</li>
 </ol>
 <p>Choose one depends on your security preference</p>
 <p>There is a noticeable overhead in terms of CPU usage (20-30%), do load-testing on throughput or latency in your different setups</p>
@@ -456,21 +522,21 @@ number of connections</code> the brokers makes</p>
 </li>
 <li>
 <p><a href="https://www.google.com/search?q=how+many+replicas+will+kafka+sync+if+min+insync+replicas+is+set">search - how many replicas will kafka sync if min insync replicas is set</a></p>
-<p>a)  <a href="https://jeqo.github.io/notes/2021-12-02-kafka-min-isr/">Use min.insync.replicas for fault-tolerance</a>
-b)  <a href="https://www.conduktor.io/kafka/kafka-topic-configuration-min-insync-replicas/">Kafka Topic Configuration: Minimum In-Sync Replicas</a>
-c)  <a href="https://docs.confluent.io/kafka/design/replication.html">Kafka Replication and Committed Messages</a></p>
+<p>a)  <a href="https://jeqo.github.io/notes/2021-12-02-kafka-min-isr/">Use min.insync.replicas for fault-tolerance</a></p>
+<p>b)  <a href="https://www.conduktor.io/kafka/kafka-topic-configuration-min-insync-replicas/">Kafka Topic Configuration: Minimum In-Sync Replicas</a></p>
+<p>c)  <a href="https://docs.confluent.io/kafka/design/replication.html">Kafka Replication and Committed Messages</a></p>
 </li>
 <li>
 <p><a href="https://www.google.com/search?q=Does+all+brokers+in+Kafka+always+have+one+replica+of+a+partition%3F">search - Does all brokers in Kafka always have one replica of a partition?</a></p>
-<p>a)  <a href="https://www.linkedin.com/pulse/apache-kafka-study-notes-2-partition-replication-youssef-ali">Apache Kafka Study Notes --- 2 --- Partition Replication</a>
-b)  <a href="https://stackoverflow.com/questions/61203211/should-topic-partitions-be-replicated-across-all-broker-nodes-in-a-kafka-cluster">Should topic partitions be replicated across all broker nodes in a Kafka cluster?</a>
-c)  <a href="https://stackoverflow.com/questions/61655973/understanding-relation-between-partitions-and-brokers-in-kafka">Understanding relation between partitions and brokers in kafka?</a>
-d)  <a href="https://stackoverflow.com/questions/46862274/whether-kafka-broker-holds-replication-set-instead-of-partitions">Whether kafka broker holds replication set instead of partitions?</a></p>
+<p>a)  <a href="https://www.linkedin.com/pulse/apache-kafka-study-notes-2-partition-replication-youssef-ali">Apache Kafka Study Notes --- 2 --- Partition Replication</a></p>
+<p>b)  <a href="https://stackoverflow.com/questions/61203211/should-topic-partitions-be-replicated-across-all-broker-nodes-in-a-kafka-cluster">Should topic partitions be replicated across all broker nodes in a Kafka cluster?</a></p>
+<p>c)  <a href="https://stackoverflow.com/questions/61655973/understanding-relation-between-partitions-and-brokers-in-kafka">Understanding relation between partitions and brokers in kafka?</a></p>
+<p>d)  <a href="https://stackoverflow.com/questions/46862274/whether-kafka-broker-holds-replication-set-instead-of-partitions">Whether kafka broker holds replication set instead of partitions?</a></p>
 </li>
 <li>
 <p><a href="https://www.google.com/search?q=min+insync+replicas+what+is+the+maximum+kafka">search - min insync replicas what is the maximum kafka</a></p>
-<p>a)  <a href="https://stackoverflow.com/questions/58806481/what-is-the-maximum-replication-factor-for-a-partition-of-kafka-topic">What is the maximum replication factor for a partition of kafka topic</a>
-b)  <a href="https://stackoverflow.com/questions/71666294/kafka-replication-factor-vs-min-insync-replicas">Kafka replication factor vs min.insync.replicas</a></p>
+<p>a)  <a href="https://stackoverflow.com/questions/58806481/what-is-the-maximum-replication-factor-for-a-partition-of-kafka-topic">What is the maximum replication factor for a partition of kafka topic</a></p>
+<p>b)  <a href="https://stackoverflow.com/questions/71666294/kafka-replication-factor-vs-min-insync-replicas">Kafka replication factor vs min.insync.replicas</a></p>
 </li>
 </ol>
 <h1 id="setup-kafka-and-grafana-dashboards-for-kafka-in-kubernetes">Setup Kafka and Grafana dashboards for Kafka in Kubernetes</h1>

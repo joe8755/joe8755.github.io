@@ -119,8 +119,12 @@
 
 <p>Reference:</p>
 <ol>
-<li><a href="https://www.keycloak.org/docs/latest/server_development/#creating-a-theme">Creating a theme</a></li>
-<li><a href="https://www.baeldung.com/spring-keycloak-custom-themes">Customizing Themes for Keycloak</a></li>
+<li>
+<p><a href="https://www.keycloak.org/docs/latest/server_development/#creating-a-theme">Creating a theme</a></p>
+</li>
+<li>
+<p><a href="https://www.baeldung.com/spring-keycloak-custom-themes">Customizing Themes for Keycloak</a></p>
+</li>
 </ol>
 <h2 id="setting-hostname-and-proxy-mode">Setting hostname and proxy mode</h2>
 <p>The <code>--hostname-strict-https=false</code> and <code>--hostname-strict=false</code> must be passed into the command <code>start --optimized</code> else error will be encountered</p>
@@ -130,18 +134,28 @@
 
 <p>Read the following links for more understanding:</p>
 <ol>
-<li><a href="https://www.keycloak.org/server/hostname">Configuring the hostname</a></li>
-<li><a href="https://www.keycloak.org/server/reverseproxy">Using a reverse proxy</a></li>
-<li><a href="https://www.keycloak.org/server/all-config?options-filter=all#category-hostname">Hostname config option</a></li>
-<li><a href="https://www.keycloak.org/server/configuration#_starting_keycloak_in_production_mode">Starting Keycloak in production mode</a></li>
-<li><a href="https://unix.stackexchange.com/questions/690655/strict-hostname-resolution-configured-but-no-hostname-was-set">Strict hostname resolution configured but no hostname was set</a></li>
+<li>
+<p><a href="https://www.keycloak.org/server/hostname">Configuring the hostname</a></p>
+</li>
+<li>
+<p><a href="https://www.keycloak.org/server/reverseproxy">Using a reverse proxy</a></p>
+</li>
+<li>
+<p><a href="https://www.keycloak.org/server/all-config?options-filter=all#category-hostname">Hostname config option</a></p>
+</li>
+<li>
+<p><a href="https://www.keycloak.org/server/configuration#_starting_keycloak_in_production_mode">Starting Keycloak in production mode</a></p>
+</li>
+<li>
+<p><a href="https://unix.stackexchange.com/questions/690655/strict-hostname-resolution-configured-but-no-hostname-was-set">Strict hostname resolution configured but no hostname was set</a></p>
+</li>
 </ol>
 <h1 id="database-postgresql">Database PostgreSQL</h1>
 <ol>
 <li>
 <p>Create a user for Keycloak</p>
-<p>a)  permission, set "Can Login"
-b)  Set a password for this user</p>
+<p>a)  permission, set "Can Login"</p>
+<p>b)  Set a password for this user</p>
 </li>
 <li>
 <p>Create a database for Keycloak</p>
@@ -155,17 +169,17 @@ b)  Set a password for this user</p>
 </li>
 <li>
 <p>Create an access token for the project</p>
-<p>a)  Expiry date default maximum should be 1 year
-b)  Role is maintainer (other roles could be used as well, I think)
-c)  Scopes includes read_registry and write_registry
-d)  Create the token and copy the secret</p>
+<p>a)  Expiry date default maximum should be 1 year</p>
+<p>b)  Role is maintainer (other roles could be used as well, I think)</p>
+<p>c)  Scopes includes read_registry and write_registry</p>
+<p>d)  Create the token and copy the secret</p>
 </li>
 <li>
 <p>Retrieve the username of the access token</p>
-<p>a)  Search for it in the member section in the GitLab project
-b)  It is created as a bot
-c)  Source is "Direct member"
-d)  Note down the username for this member after the "@" sign</p>
+<p>a)  Search for it in the member section in the GitLab project</p>
+<p>b)  It is created as a bot</p>
+<p>c)  Source is "Direct member"</p>
+<p>d)  Note down the username for this member after the "@" sign</p>
 </li>
 </ol>
 <h1 id="building-and-uploading-the-container-image">Building and uploading the container image</h1>
@@ -214,9 +228,9 @@ d)  Note down the username for this member after the "@" sign</p>
 </li>
 <li>
 <p>Copy theme folder in the project into container build stage <code>./theme</code> relative path to working directory</p>
-<p>a) <a href="https://www.baeldung.com/keycloak-custom-login-page">Customizing the Login Page for Keycloak</a>
-b) <a href="https://www.baeldung.com/spring-keycloak-custom-themes">Customizing Themes for Keycloak</a>
-c) <a href="https://stackoverflow.com/questions/39356300/avoid-keycloak-default-login-page-and-use-project-login-page">Avoid keycloak default login page and use project login page</a></p>
+<p>a) <a href="https://www.baeldung.com/keycloak-custom-login-page">Customizing the Login Page for Keycloak</a></p>
+<p>b) <a href="https://www.baeldung.com/spring-keycloak-custom-themes">Customizing Themes for Keycloak</a></p>
+<p>c) <a href="https://stackoverflow.com/questions/39356300/avoid-keycloak-default-login-page-and-use-project-login-page">Avoid keycloak default login page and use project login page</a></p>
 </li>
 <li>
 <p>Importing a realm on startup (admin bootstrapping) is not recommended other than running Keycloak in Dev mode</p>
@@ -230,9 +244,15 @@ c) <a href="https://stackoverflow.com/questions/39356300/avoid-keycloak-default-
 <h2 id="token-exchange">Token exchange</h2>
 <p>This feature is disabled until further notice</p>
 <ol>
-<li><a href="https://keycloak.ch/keycloak-tutorials/tutorial-token-exchange/">Configuring Token Exchange using the CLI</a></li>
-<li><a href="https://www.keycloak.org/docs/latest/securing_apps/#_token-exchange">Using token exchange</a></li>
-<li><a href="https://github.com/keycloak/keycloak/discussions/26502">Token-Exchange Use-cases</a></li>
+<li>
+<p><a href="https://keycloak.ch/keycloak-tutorials/tutorial-token-exchange/">Configuring Token Exchange using the CLI</a></p>
+</li>
+<li>
+<p><a href="https://www.keycloak.org/docs/latest/securing_apps/#_token-exchange">Using token exchange</a></p>
+</li>
+<li>
+<p><a href="https://github.com/keycloak/keycloak/discussions/26502">Token-Exchange Use-cases</a></p>
+</li>
 </ol>
 <p>the argument <code>--features=token-exchange</code> as mentioned in</p>
 <ol>
@@ -252,9 +272,15 @@ gitlab-url:port/UserOrGroup/keycloak:v1.0.0
 <p>It is better to set <code>ENTRYPOINT</code> with only the executable and <code>CMD</code> with arguments, remove <code>CMD</code> if no argument is needed.</p>
 <p>Read</p>
 <ol>
-<li><a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell">Define a Command and Arguments for a Container</a></li>
-<li><a href="https://docs.docker.com/reference/dockerfile/#entrypoint">ENTRYPOINT</a></li>
-<li><a href="https://docs.docker.com/reference/dockerfile/#cmd">CMD</a></li>
+<li>
+<p><a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell">Define a Command and Arguments for a Container</a></p>
+</li>
+<li>
+<p><a href="https://docs.docker.com/reference/dockerfile/#entrypoint">ENTRYPOINT</a></p>
+</li>
+<li>
+<p><a href="https://docs.docker.com/reference/dockerfile/#cmd">CMD</a></p>
+</li>
 </ol>
 <h1 id="adding-secrets-to-aws-secrets-manager">Adding secrets to AWS Secrets Manager</h1>
 <ol>
@@ -263,13 +289,13 @@ gitlab-url:port/UserOrGroup/keycloak:v1.0.0
 </li>
 <li>
 <p>Add the following secrets in the key/value</p>
-<p>a)  keycloak-admin = ADMINUSERNAME
-b)  keycloak-admin-password = ADMINPASSWORD
-c)  kc-db-url-host = postgresql.domain.local
-d)  kc-db-url-port = 8888
-e)  kc-db-url-database = DBFORKEYCLOAK
-f)  kc-db-username = DBKEYCLOAKUSERNAME
-g)  kc-db-password = DBKEYCLOAKPASSWORD</p>
+<p>a)  keycloak-admin = ADMINUSERNAME</p>
+<p>b)  keycloak-admin-password = ADMINPASSWORD</p>
+<p>c)  kc-db-url-host = postgresql.domain.local</p>
+<p>d)  kc-db-url-port = 8888</p>
+<p>e)  kc-db-url-database = DBFORKEYCLOAK</p>
+<p>f)  kc-db-username = DBKEYCLOAKUSERNAME</p>
+<p>g)  kc-db-password = DBKEYCLOAKPASSWORD</p>
 </li>
 <li>
 <p>Add tags</p>
@@ -427,10 +453,18 @@ g)  kc-db-password = DBKEYCLOAKPASSWORD</p>
 
 <h1 id="add-url-to-aws-route53">Add URL to AWS Route53</h1>
 <ol>
-<li>Add a record name from the host url in Kubernetes ingress</li>
-<li>Set record type to CNAME</li>
-<li>Copy the LoadBalancers value from the Kubernetes ingress object and paste it into the Value field</li>
-<li>Routing policy set to Simple Routing</li>
+<li>
+<p>Add a record name from the host url in Kubernetes ingress</p>
+</li>
+<li>
+<p>Set record type to CNAME</p>
+</li>
+<li>
+<p>Copy the LoadBalancers value from the Kubernetes ingress object and paste it into the Value field</p>
+</li>
+<li>
+<p>Routing policy set to Simple Routing</p>
+</li>
 </ol>
 <h1 id="links">Links</h1>
 <ol>
@@ -441,15 +475,27 @@ g)  kc-db-password = DBKEYCLOAKPASSWORD</p>
 <li>
 <p><a href="https://www.keycloak.org/server/db">Configuring the database</a></p>
 </li>
-<li><a href="https://www.keycloak.org/server/configuration-production">Configuring Keycloak for production</a></li>
-<li><a href="https://github.com/keycloak/keycloak/tree/main/quarkus/container">Keycloak Container Image</a></li>
-<li><a href="https://www.keycloak.org/getting-started/getting-started-kube">Keycloak Kubernetes</a></li>
+<li>
+<p><a href="https://www.keycloak.org/server/configuration-production">Configuring Keycloak for production</a></p>
+</li>
+<li>
+<p><a href="https://github.com/keycloak/keycloak/tree/main/quarkus/container">Keycloak Container Image</a></p>
+</li>
+<li>
+<p><a href="https://www.keycloak.org/getting-started/getting-started-kube">Keycloak Kubernetes</a></p>
+</li>
 </ol>
 <h1 id="keycloak-operator">Keycloak Operator</h1>
 <ol>
-<li><a href="https://www.keycloak.org/operator/installation">Keycloak Operator Installation</a></li>
-<li><a href="https://github.com/keycloak/keycloak/tree/main/operator">Keycloak on Quarkus</a></li>
-<li><a href="https://operatorhub.io/operator/keycloak-operator">Keycloak Operator - OperatorHub.io</a></li>
+<li>
+<p><a href="https://www.keycloak.org/operator/installation">Keycloak Operator Installation</a></p>
+</li>
+<li>
+<p><a href="https://github.com/keycloak/keycloak/tree/main/operator">Keycloak on Quarkus</a></p>
+</li>
+<li>
+<p><a href="https://operatorhub.io/operator/keycloak-operator">Keycloak Operator - OperatorHub.io</a></p>
+</li>
 </ol>
 
 
